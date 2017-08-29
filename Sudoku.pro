@@ -39,5 +39,5 @@ HEADERS += \
     UI/Window.h
 
 FORMS += \
-    UI/widget.ui
+    UI/Window.ui
 
