@@ -25,12 +25,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        widget.cpp \
-    glwidget.cpp
+    Engine/Sudoku.cpp \
+    Engine/SudokuCreator.cpp \
+    Engine/SudokuSolver.cpp \
+    main.cpp \
+    Window.cpp \
+    GLWidget.cpp
 
 HEADERS += \
-        widget.h \
-    glwidget.h
+    Engine/Sudoku.h \
+    Engine/SudokuCreator.h \
+    Engine/SudokuSolver.h \
+    Window.h \
+    GLWidget.h
 
 FORMS += \
         widget.ui
