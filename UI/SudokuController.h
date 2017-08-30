@@ -18,11 +18,8 @@ private:
 
 public:
     explicit SudokuController(SudokuView *sudokuView, QObject *parent = nullptr);
-
-signals:
-
-public slots:
-    void onGenerateRandomSudoku(int preferredClueCount);
+    ~SudokuController() override;
+    void generateRandomSudoku(int preferredClueCount);
 };
 
 #endif // SUDOKUCONTROLLER_H

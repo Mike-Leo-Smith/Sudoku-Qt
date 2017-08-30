@@ -60,20 +60,26 @@ void SudokuView::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
 
-    auto roundedWidth = (width() - _outerGridLineWidth * 2) / 9 * 9;
-    auto roundedHeight = (height() - _outerGridLineWidth * 2) / 9 * 9;
+    if (width() == _boardLength + _outerGridLineWidth && height() == _boardLength + _outerGridLineWidth) {
+        return;
+    }
+
+    auto roundedWidth = (width() - _outerGridLineWidth) / 18 * 18;
+    auto roundedHeight = (height() - _outerGridLineWidth) / 18 * 18;
 
     _boardLength = std::min(roundedWidth, roundedHeight);
     _regionLength = _boardLength / 3;
     _cellLength = _boardLength / 9;
+
+    resize(_boardLength + _outerGridLineWidth, _boardLength + _outerGridLineWidth);
 
     update();
 }
 
 void SudokuView::mouseMoveEvent(QMouseEvent *event)
 {
-    _rowUnderMouse = (event->y() - _outerGridLineWidth) / _cellLength;
-    _colUnderMouse = (event->x() - _outerGridLineWidth) / _cellLength;
+    _rowUnderMouse = (event->y() - _outerGridLineWidth * 0.5) / _cellLength;
+    _colUnderMouse = (event->x() - _outerGridLineWidth * 0.5) / _cellLength;
     update();
 }
 
@@ -85,20 +91,18 @@ void SudokuView::mousePressEvent(QMouseEvent *event) {
 void SudokuView::_displayNumbersInCell(const NumberCell &numberCell)
 {
     QString numberString = "";
-
+    int counter = 0;
     for (auto number : numberCell.numbers) {
+        while (++counter < number) {
+            numberString.append(" ");
+        }
         numberString.append(QString::number(number));
     }
 
     qreal numberSize = 0;
 
-    if (numberString.length() >= 5) {
-        numberSize = _cellLength / 3.0;
-        //numberString.insert(8, "\n");
-        numberString.insert(4, "\n");
-    } else if (numberString.length() >= 2) {
-        numberSize = _cellLength / 2.5;
-        numberString.insert(2, "\n");
+    if (numberString.length() > 1) {
+        numberSize = _cellLength / 3;
     } else {
         numberSize = _cellLength;
     }
@@ -110,10 +114,10 @@ void SudokuView::_displayNumbersInCell(const NumberCell &numberCell)
     } else {
         painter.setPen(numberCell.color);
     }
-    painter.translate(_outerGridLineWidth + numberCell.col * _cellLength, _outerGridLineWidth + numberCell.row * _cellLength);
+    painter.translate(_outerGridLineWidth * 0.5 + numberCell.col * _cellLength, _outerGridLineWidth * 0.5 + numberCell.row * _cellLength);
 
     QFont font;
-    font.setPointSize(numberSize);
+    font.setPixelSize(numberSize);
     font.setLetterSpacing(QFont::AbsoluteSpacing, numberSize * 0.1);
     painter.setFont(font);
     QTextOption textOption(Qt::AlignCenter);
@@ -124,7 +128,7 @@ void SudokuView::_displayNumbersInCell(const NumberCell &numberCell)
 void SudokuView::_drawGrids()
 {
     QPainter painter(this);
-    painter.translate(_outerGridLineWidth, _outerGridLineWidth);
+    painter.translate(_outerGridLineWidth * 0.5, _outerGridLineWidth * 0.5);
 
     // Draw background.
     painter.setBrush(_backgroundColor);

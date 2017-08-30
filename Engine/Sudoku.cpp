@@ -203,34 +203,34 @@ int Sudoku::countNumbersInCell(int row, int col) const
 
 void Sudoku::print() const
 {
-    int count = 0;
-    std::cout << "┌───────┬───────┬───────┐\n";
-    for (const auto &row : _board) {
-        std::cout << "│";
-        for (const auto &cell : row) {
-            auto availableNumbers = _convertBitsToNumbers(cell.bits);
-            std::cout << " ";
-            if (availableNumbers.empty()) {
-                std::cout << " ";
-            } else if (availableNumbers.size() == 1) {
-                std::cout << availableNumbers.front();
-            } else {
-                std::cout << "?";
-            }
-            count++;
-            if (count % 3 == 0) {
-                std::cout << " │";
-            }
-        }
+//    int count = 0;
+//    std::cout << "┌───────┬───────┬───────┐\n";
+//    for (const auto &row : _board) {
+//        std::cout << "│";
+//        for (const auto &cell : row) {
+//            auto availableNumbers = _convertBitsToNumbers(cell.bits);
+//            std::cout << " ";
+//            if (availableNumbers.empty()) {
+//                std::cout << " ";
+//            } else if (availableNumbers.size() == 1) {
+//                std::cout << availableNumbers.front();
+//            } else {
+//                std::cout << "?";
+//            }
+//            count++;
+//            if (count % 3 == 0) {
+//                std::cout << " │";
+//            }
+//        }
 
-        if (count % 27 == 0) {
-            if (count == 81) {
-                std::cout << "\n└───────┴───────┴───────┘";
-            } else {
-                std::cout << "\n├───────┼───────┼───────┤";
-            }
-        }
-        std::cout << "\n";
-    }
-    std::cout << std::endl;
+//        if (count % 27 == 0) {
+//            if (count == 81) {
+//                std::cout << "\n└───────┴───────┴───────┘";
+//            } else {
+//                std::cout << "\n├───────┼───────┼───────┤";
+//            }
+//        }
+//        std::cout << "\n";
+//    }
+//    std::cout << std::endl;
 }

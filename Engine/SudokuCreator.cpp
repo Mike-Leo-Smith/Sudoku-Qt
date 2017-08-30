@@ -3,6 +3,8 @@
 //
 
 #include <random>
+#include <utility>
+#include <algorithm>
 #include "SudokuCreator.h"
 #include "Sudoku.h"
 
@@ -33,10 +35,10 @@ Sudoku *SudokuCreator::random(int preferredClueCount)
     // Constrain the number of clues to make sure the game is playable.
     auto clueCount = std::min(std::max(minClueCount, preferredClueCount), maxClueCount);
     
-    std::random_device randomDevice;
-    std::default_random_engine randomEngine(randomDevice());
+    static std::random_device randomDevice;
+    static std::default_random_engine randomEngine(randomDevice());
     
-    auto randomIndex = [&randomEngine](size_t total) {
+    auto randomIndex = [](size_t total) {
         return static_cast<size_t>(randomEngine() / static_cast<double>(randomEngine.max()) * total);
     };
     

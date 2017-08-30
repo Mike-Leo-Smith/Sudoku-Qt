@@ -22,14 +22,8 @@ private:
     SudokuController *_sudokuController;
     int _currentDifficulty;
 
-    int clueCountForDifficulty(int difficultyChoiceIndex) const;
-
-signals:
-    void generateRandomSudoku(int preferredClueCount);
-
-private slots:
-    void onResetButtonClicked();
-    void onDifficultySet(int newDifficulty);
+    int _clueCountForSelectedDifficulty() const;
+    void _setDifficulty(int newDifficulty);
 };
 
 #endif // WIDGET_H
