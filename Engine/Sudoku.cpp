@@ -28,7 +28,7 @@ Sudoku::Numbers Sudoku::_convertBitsToNumbers(Bits bits)
             numbers.emplace_back(i);
         }
     }
-    return std::move(numbers);
+    return numbers;
 }
 
 int Sudoku::_countBits(Bits bits)
@@ -36,7 +36,7 @@ int Sudoku::_countBits(Bits bits)
     // Get the lower 10 bits in case of unexpected higher part.
     constexpr int lowerTenBitsMask = 0x3ff;
     bits &= lowerTenBitsMask;
-    
+
     int count = 0;
     while (bits != 0) {
         bits &= (bits - 1);
@@ -114,21 +114,21 @@ std::vector<int> Sudoku::getAvailableNumbersForCell(int row, int col) const
 inline Sudoku::Bits Sudoku::_getOccupiedBitsForCell(int row, int col) const
 {
     Bits occupiedBits = 0;
-    
+
     // Occupied bits in the row.
     for (int c = 0; c < 9; c++) {
         if (c != col) {
             occupiedBits |= _board[row][c].bits;
         }
     }
-    
+
     // Occupied bits in the column.
     for (int r = 0; r < 9; r++) {
         if (r != row) {
             occupiedBits |= _board[r][col].bits;
         }
     }
-    
+
     // Occupied bits in the sub-region.
     int startingRow = row / 3 * 3;
     int startingCol = col / 3 * 3;
@@ -137,7 +137,7 @@ inline Sudoku::Bits Sudoku::_getOccupiedBitsForCell(int row, int col) const
             occupiedBits |= _board[r][c].bits;
         }
     }
-    
+
     return occupiedBits;
 }
 
@@ -151,7 +151,7 @@ bool Sudoku::isSolved() const
             }
         }
     }
-    
+
     // Check conflicts in rows.
     for (const auto &row : _board) {
         Bits occupied = 0;
@@ -162,7 +162,7 @@ bool Sudoku::isSolved() const
             return false;
         }
     }
-    
+
     // Check conflicts in columns.
     for (int col = 0; col < 9; col++) {
         Bits occupied = 0;
@@ -173,7 +173,7 @@ bool Sudoku::isSolved() const
             return false;
         }
     }
-    
+
     // Check conflicts in sub-regions.
     for (int regionRow = 0; regionRow < 9; regionRow += 3) {
         for (int regionCol = 0; regionCol < 9; regionCol += 3) {
@@ -188,7 +188,7 @@ bool Sudoku::isSolved() const
             }
         }
     }
-    
+
     // All tests passed, puzzle solved.
     return true;
 }
@@ -222,7 +222,7 @@ void Sudoku::print() const
                 std::cout << " │";
             }
         }
-        
+
         if (count % 27 == 0) {
             if (count == 81) {
                 std::cout << "\n└───────┴───────┴───────┘";

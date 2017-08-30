@@ -23,21 +23,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 
-SOURCES += \
+SOURCES += main.cpp \
     Engine/Sudoku.cpp \
     Engine/SudokuCreator.cpp \
     Engine/SudokuSolver.cpp \
-    UI/GLWidget.cpp \
     UI/Window.cpp \
-    main.cpp
+    UI/SudokuView.cpp \
+    UI/SudokuController.cpp
 
 HEADERS += \
     Engine/Sudoku.h \
     Engine/SudokuCreator.h \
     Engine/SudokuSolver.h \
-    UI/GLWidget.h \
-    UI/Window.h
+    UI/Window.h \
+    UI/SudokuView.h \
+    UI/SudokuController.h
 
 FORMS += \
     UI/Window.ui
+
+DISTFILES +=
 
