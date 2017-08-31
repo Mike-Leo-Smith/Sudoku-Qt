@@ -1,9 +1,11 @@
-#ifndef SUDOKUCONTROLLER_H
-#define SUDOKUCONTROLLER_H
+#ifndef SUDOKU_CONTROLLER_H
+#define SUDOKU_CONTROLLER_H
 
 #include <QObject>
+#include <QStack>
+#include <QFuture>
+#include "../Engine/Sudoku.h"
 
-class Sudoku;
 class SudokuView;
 
 class SudokuController : public QObject
@@ -11,15 +13,29 @@ class SudokuController : public QObject
     Q_OBJECT
 
 private:
-    Sudoku *_sudoku;
-    SudokuView *_sudokuView;
+    using SudokuStack = QStack<Sudoku>;
+    QFuture<void> _solvingProgress;
 
+    int _playCount = 0;
+    Sudoku _sudoku;
+    SudokuView *_sudokuView;
+    SudokuStack _undoStack;
+    SudokuStack _redoStack;
+
+private slots:
     void _updateSudokuView();
+    void _setCurrentSudoku(const Sudoku &sudoku);
 
 public:
     explicit SudokuController(SudokuView *sudokuView, QObject *parent = nullptr);
     ~SudokuController() override;
+
+public slots:
     void generateRandomSudoku(int preferredClueCount);
+    void solveCurrentSudoku();
+
+signals:
+    void sudokuSolved(int id, Sudoku *solvedSudoku);
 };
 
-#endif // SUDOKUCONTROLLER_H
+#endif // SUDOKU_CONTROLLER_H

@@ -8,15 +8,16 @@
 Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Widget)
 {
     ui->setupUi(this);
-
-    connect(ui->resetButton, QPushButton::clicked, [this] {
-        _sudokuController->generateRandomSudoku(_clueCountForSelectedDifficulty());
-    });
-    connect(ui->difficultyChoices, static_cast<void (QComboBox:: *)(int)>(QComboBox::currentIndexChanged), [this](int newDifficulty){
-        _setDifficulty(newDifficulty);
-    });
     _sudokuController = new SudokuController(ui->sudokuView, this);
     _sudokuController->generateRandomSudoku(_clueCountForSelectedDifficulty());
+
+    connect(ui->resetButton, &QPushButton::clicked, [this] {
+        _sudokuController->generateRandomSudoku(_clueCountForSelectedDifficulty());
+    });
+    connect(ui->difficultyChoices, static_cast<void (QComboBox:: *)(int)>(&QComboBox::currentIndexChanged), [this](int newDifficulty){
+        _setDifficulty(newDifficulty);
+    });
+    connect(ui->solveButton, &QPushButton::clicked, _sudokuController, &SudokuController::solveCurrentSudoku);
 }
 
 Window::~Window()

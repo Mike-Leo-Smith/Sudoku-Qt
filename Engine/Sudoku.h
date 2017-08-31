@@ -10,10 +10,10 @@
 class Sudoku
 {
     friend class SudokuCreator;
-    
+
     using Bits = unsigned short;
     using Numbers = std::vector<int>;
-    
+
     struct Cell
     {
         Bits bits;
@@ -22,13 +22,13 @@ class Sudoku
 
 private:
     Cell _board[9][9];
-    
+
     static Bits _convertNumberToBit(int number);
     static Numbers _convertBitsToNumbers(Bits bits);
     static int _countBits(Bits bits);
     static bool _isInBoard(int row, int col);
     static bool _isNumberValid(int number);
-    
+
     unsigned short _getOccupiedBitsForCell(int row, int col) const;
 
 public:
@@ -38,7 +38,7 @@ public:
     Sudoku(const Sudoku &) = default;
     Sudoku &operator=(Sudoku &&) = default;
     Sudoku &operator=(const Sudoku &) = default;
-    
+
     bool isSolved() const;
     void print() const;
     bool isPreset(int row, int col) const;
@@ -47,6 +47,7 @@ public:
     Numbers getAvailableNumbersForCell(int row, int col) const;
     Numbers getConflictiveNumbersInCell(int row, int col) const;
     bool clearNumbersInCell(int row, int col);
+    bool setNumbersInCell(int row, int col, Numbers numbers);
     bool addNumberToCell(int row, int col, int number);
     bool removeNumberFromCell(int row, int col, int number);
 };

@@ -201,6 +201,19 @@ int Sudoku::countNumbersInCell(int row, int col) const
     return _countBits(_board[row][col].bits);
 }
 
+bool Sudoku::setNumbersInCell(int row, int col, Numbers numbers)
+{
+    if (isPreset(row, col)) {
+        return false;
+    }
+
+    clearNumbersInCell(row, col);
+    for (auto number : numbers) {
+        addNumberToCell(row, row, number);
+    }
+    return true;
+}
+
 void Sudoku::print() const
 {
 //    int count = 0;

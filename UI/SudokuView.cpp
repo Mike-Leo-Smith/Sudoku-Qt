@@ -90,39 +90,40 @@ void SudokuView::mousePressEvent(QMouseEvent *event) {
 
 void SudokuView::_displayNumbersInCell(const NumberCell &numberCell)
 {
-    QString numberString = "";
-    int counter = 0;
-    for (auto number : numberCell.numbers) {
-        while (++counter < number) {
-            numberString.append(" ");
-        }
-        numberString.append(QString::number(number));
-    }
-
-    qreal numberSize = 0;
-
-    if (numberString.length() > 1) {
-        numberSize = _cellLength / 3;
-    } else {
-        numberSize = _cellLength;
+    qreal numberSize = _cellLength;
+    if (numberCell.numbers.size() > 1) {
+        numberSize /= 3.0;
     }
 
     QPainter painter(this);
-    painter.setRenderHint(QPainter::TextAntialiasing);
+    painter.setRenderHints(QPainter::TextAntialiasing | QPainter::Antialiasing);
+
     if (_rowUnderMouse == numberCell.row && _colUnderMouse == numberCell.col) {
         painter.setPen(numberCell.color.lighter());
     } else {
         painter.setPen(numberCell.color);
     }
+
     painter.translate(_outerGridLineWidth * 0.5 + numberCell.col * _cellLength, _outerGridLineWidth * 0.5 + numberCell.row * _cellLength);
 
     QFont font;
     font.setPixelSize(numberSize);
-    font.setLetterSpacing(QFont::AbsoluteSpacing, numberSize * 0.1);
     painter.setFont(font);
+
     QTextOption textOption(Qt::AlignCenter);
     textOption.setWrapMode(QTextOption::WordWrap);
-    painter.drawText(QRect(0, 0, _cellLength, _cellLength), numberString, textOption);
+
+    if (numberCell.numbers.size() > 1) {
+        for (auto number : numberCell.numbers) {
+            auto rowInCell = (number - 1) / 3;
+            auto colInCell = (number - 1) % 3;
+            auto textOffset = QPoint(colInCell * numberSize, rowInCell * numberSize);
+            auto textSize = QSize(numberSize, numberSize);
+            painter.drawText(QRect(textOffset, textSize), QString::number(number), textOption);
+        }
+    } else {
+        painter.drawText(QRect(0, 0, _cellLength, _cellLength), QString::number(numberCell.numbers.front()), textOption);
+    }
 }
 
 void SudokuView::_drawGrids()
