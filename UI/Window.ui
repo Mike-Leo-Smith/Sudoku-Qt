@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>823</width>
+    <width>937</width>
     <height>674</height>
    </rect>
   </property>
@@ -31,7 +31,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QPushButton" name="resetButton">
+  <widget class="QPushButton" name="newgameButton">
    <property name="geometry">
     <rect>
      <x>430</x>
@@ -50,7 +50,7 @@
   <widget class="QComboBox" name="difficultyChoices">
    <property name="geometry">
     <rect>
-     <x>300</x>
+     <x>130</x>
      <y>630</y>
      <width>111</width>
      <height>31</height>
@@ -116,8 +116,47 @@
      <height>32</height>
     </rect>
    </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Answer</string>
+   </property>
+  </widget>
+  <widget class="KeyboardView" name="keyboardView" native="true">
+   <property name="geometry">
+    <rect>
+     <x>620</x>
+     <y>190</y>
+     <width>281</width>
+     <height>291</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="hintButton">
+   <property name="geometry">
+    <rect>
+     <x>660</x>
+     <y>630</y>
+     <width>113</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Hints</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="resetButton">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>630</y>
+     <width>113</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Restart</string>
    </property>
   </widget>
  </widget>
@@ -127,6 +166,12 @@
    <class>SudokuView</class>
    <extends>QOpenGLWidget</extends>
    <header>UI/SudokuView.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KeyboardView</class>
+   <extends>QWidget</extends>
+   <header>UI/KeyboardView.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

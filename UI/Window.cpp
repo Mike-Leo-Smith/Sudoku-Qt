@@ -11,13 +11,20 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Widget)
     _sudokuController = new SudokuController(ui->sudokuView, this);
     _sudokuController->generateRandomSudoku(_clueCountForSelectedDifficulty());
 
-    connect(ui->resetButton, &QPushButton::clicked, [this] {
+    connect(ui->newgameButton, &QPushButton::clicked, [this] {
         _sudokuController->generateRandomSudoku(_clueCountForSelectedDifficulty());
     });
     connect(ui->difficultyChoices, static_cast<void (QComboBox:: *)(int)>(&QComboBox::currentIndexChanged), [this](int newDifficulty){
         _setDifficulty(newDifficulty);
     });
     connect(ui->solveButton, &QPushButton::clicked, _sudokuController, &SudokuController::solveCurrentSudoku);
+    connect(ui->keyboardView, &KeyboardView::buttonClicked, _sudokuController, &SudokuController::toggleNumberInSelectedCell);
+    connect(ui->hintButton, &QPushButton::clicked, _sudokuController, &SudokuController::getHintsForSelectedCell);
+    connect(_sudokuController, &SudokuController::shouldSetMarkedNumbers, ui->keyboardView, &KeyboardView::setSelectedButtons);
+    connect(_sudokuController, &SudokuController::shouldDisableKeyboard, ui->keyboardView, [this] {
+        ui->keyboardView->setDisabled(true);
+    });
+    connect(ui->resetButton, &QPushButton::clicked, _sudokuController, &SudokuController::resetCurrentSudoku);
 }
 
 Window::~Window()

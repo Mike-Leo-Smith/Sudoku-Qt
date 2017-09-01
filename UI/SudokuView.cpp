@@ -85,7 +85,16 @@ void SudokuView::mouseMoveEvent(QMouseEvent *event)
 
 void SudokuView::mousePressEvent(QMouseEvent *event) {
     Q_UNUSED(event);
-    emit cellSelected(_rowUnderMouse, _colUnderMouse);
+    if (_selectedRow == _rowUnderMouse && _selectedCol == _colUnderMouse) {
+        _selectedRow = -1;
+        _selectedCol = -1;
+        emit cellDeselected(_selectedRow, _selectedCol);
+    } else {
+        _selectedRow = _rowUnderMouse;
+        _selectedCol = _colUnderMouse;
+        emit cellSelected(_rowUnderMouse, _colUnderMouse);
+    }
+    update();
 }
 
 void SudokuView::_displayNumbersInCell(const NumberCell &numberCell)
@@ -160,15 +169,22 @@ void SudokuView::_drawGrids()
         painter.drawLine(0, y, _boardLength, y);
     }
 
-    // Hightlight the cell under the mouse.
-    if (_rowUnderMouse >= 0 && _rowUnderMouse < 9 && _colUnderMouse >= 0 && _colUnderMouse < 9) {
-        painter.setPen(Qt::NoPen);
-        painter.setBrush(Qt::darkGray);
-        painter.translate(_colUnderMouse * _cellLength + _innerGridLineWidth * 0.5, _rowUnderMouse * _cellLength + _innerGridLineWidth * 0.5);
-        painter.drawRect(0, 0, _cellLength - _innerGridLineWidth, _cellLength - _innerGridLineWidth);
-        painter.setBrush(_backgroundColor.lighter());
-        painter.drawRect(0, 0, _cellLength - _innerGridLineWidth * 2, _cellLength - _innerGridLineWidth * 2);
-    }
+    auto highlightCell = [this, &painter](int row, int col, QColor color) {
+        if (row >= 0 && row < 9 && col >= 0 && col < 9) {
+            painter.save();
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(Qt::darkGray);
+            painter.translate(col * _cellLength + _innerGridLineWidth * 0.5, row * _cellLength + _innerGridLineWidth * 0.5);
+            painter.drawRect(0, 0, _cellLength - _innerGridLineWidth, _cellLength - _innerGridLineWidth);
+            painter.setBrush(color);
+            painter.drawRect(0, 0, _cellLength - _innerGridLineWidth * 2, _cellLength - _innerGridLineWidth * 2);
+            painter.restore();
+        }
+    };
+
+    // Hightlight the cell under the mouse and the selected cell.
+    highlightCell(_rowUnderMouse, _colUnderMouse, _backgroundColor.lighter());
+    highlightCell(_selectedRow, _selectedCol, _backgroundColor.darker());
 }
 
 void SudokuView::_drawNumbers()
@@ -178,4 +194,22 @@ void SudokuView::_drawNumbers()
             _displayNumbersInCell(numberCell);
         }
     }
+}
+
+int SudokuView::selectedRow() const
+{
+    return _selectedRow;
+}
+
+int SudokuView::selectedCol() const
+{
+    return _selectedCol;
+}
+
+void SudokuView::deselectCell()
+{
+    _selectedRow = -1;
+    _selectedCol = -1;
+    _rowUnderMouse = -1;
+    _colUnderMouse = -1;
 }

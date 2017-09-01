@@ -41,15 +41,18 @@ public:
 
     bool isSolved() const;
     void print() const;
-    bool isPreset(int row, int col) const;
+    bool isImmutable(int row, int col) const;
     int countNumbersInCell(int row, int col) const;
     Numbers getNumbersInCell(int row, int col) const;
     Numbers getAvailableNumbersForCell(int row, int col) const;
     Numbers getConflictiveNumbersInCell(int row, int col) const;
+    void reset();
     bool clearNumbersInCell(int row, int col);
     bool setNumbersInCell(int row, int col, Numbers numbers);
     bool addNumberToCell(int row, int col, int number);
     bool removeNumberFromCell(int row, int col, int number);
+    bool isNumberInCell(int row, int col, int number);
+    bool toggleNumberInCell(int row, int col, int number);
 };
 
 #endif  // SUDOKU_SUDOKU_H

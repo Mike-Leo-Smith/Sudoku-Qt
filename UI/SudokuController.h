@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QStack>
 #include <QFuture>
+#include <QVector>
 #include "../Engine/Sudoku.h"
 
 class SudokuView;
@@ -19,6 +20,7 @@ private:
     int _playCount = 0;
     Sudoku _sudoku;
     SudokuView *_sudokuView;
+
     SudokuStack _undoStack;
     SudokuStack _redoStack;
 
@@ -33,9 +35,15 @@ public:
 public slots:
     void generateRandomSudoku(int preferredClueCount);
     void solveCurrentSudoku();
+    void resetCurrentSudoku();
+    void toggleNumberInSelectedCell(int number);
+    void getHintsForSelectedCell();
 
 signals:
     void sudokuSolved(int id, Sudoku *solvedSudoku);
+
+    void shouldSetMarkedNumbers(QVector<int> numbersInCell);
+    void shouldDisableKeyboard();
 };
 
 #endif // SUDOKU_CONTROLLER_H

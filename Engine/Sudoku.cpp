@@ -63,14 +63,14 @@ std::vector<int> Sudoku::getNumbersInCell(int row, int col) const
     return _convertBitsToNumbers(_board[row][col].bits);
 }
 
-bool Sudoku::isPreset(int row, int col) const
+bool Sudoku::isImmutable(int row, int col) const
 {
-    return _isInBoard(row, col) && _board[row][col].preset;
+    return !_isInBoard(row, col) || _board[row][col].preset;
 }
 
 bool Sudoku::clearNumbersInCell(int row, int col)
 {
-    if (!isPreset(row, col)) {
+    if (!isImmutable(row, col)) {
         _board[row][col].bits = 0;
         return true;
     }
@@ -79,7 +79,7 @@ bool Sudoku::clearNumbersInCell(int row, int col)
 
 bool Sudoku::addNumberToCell(int row, int col, int number)
 {
-    if (!isPreset(row, col) && _isNumberValid(number)) {
+    if (!isImmutable(row, col) && _isNumberValid(number) && !isImmutable(row, col)) {
         _board[row][col].bits |= _convertNumberToBit(number);
         return true;
     }
@@ -88,7 +88,7 @@ bool Sudoku::addNumberToCell(int row, int col, int number)
 
 bool Sudoku::removeNumberFromCell(int row, int col, int number)
 {
-    if (!isPreset(row, col) && _isNumberValid(number)) {
+    if (!isImmutable(row, col) && _isNumberValid(number) && !isImmutable(row, col)) {
         _board[row][col].bits &= ~_convertNumberToBit(number);
         return true;
     }
@@ -109,6 +109,15 @@ std::vector<int> Sudoku::getAvailableNumbersForCell(int row, int col) const
         return {};
     }
     return _convertBitsToNumbers(~_getOccupiedBitsForCell(row, col));
+}
+
+void Sudoku::reset()
+{
+    for (auto &row : _board) {
+        for (auto &cell : row) {
+            cell.bits = cell.preset ? cell.bits : 0;
+        }
+    }
 }
 
 inline Sudoku::Bits Sudoku::_getOccupiedBitsForCell(int row, int col) const
@@ -134,7 +143,9 @@ inline Sudoku::Bits Sudoku::_getOccupiedBitsForCell(int row, int col) const
     int startingCol = col / 3 * 3;
     for (int r = startingRow; r < startingRow + 3; r++) {
         for (int c = startingCol; c < startingCol + 3; c++) {
-            occupiedBits |= _board[r][c].bits;
+            if (r != row || c != col) {
+                occupiedBits |= _board[r][c].bits;
+            }
         }
     }
 
@@ -203,47 +214,64 @@ int Sudoku::countNumbersInCell(int row, int col) const
 
 bool Sudoku::setNumbersInCell(int row, int col, Numbers numbers)
 {
-    if (isPreset(row, col)) {
+    if (isImmutable(row, col)) {
         return false;
     }
 
     clearNumbersInCell(row, col);
     for (auto number : numbers) {
-        addNumberToCell(row, row, number);
+        addNumberToCell(row, col, number);
     }
+    return true;
+}
+
+bool Sudoku::isNumberInCell(int row, int col, int number)
+{
+    if (!_isInBoard(row, col) || !_isNumberValid(number)) {
+        return false;
+    }
+    return (_board[row][col].bits & _convertNumberToBit(number)) != 0;
+}
+
+bool Sudoku::toggleNumberInCell(int row, int col, int number)
+{
+    if (!_isInBoard(row, col) || !_isNumberValid(number) || isImmutable(row, col)) {
+        return false;
+    }
+    _board[row][col].bits ^= _convertNumberToBit(number);
     return true;
 }
 
 void Sudoku::print() const
 {
-//    int count = 0;
-//    std::cout << "┌───────┬───────┬───────┐\n";
-//    for (const auto &row : _board) {
-//        std::cout << "│";
-//        for (const auto &cell : row) {
-//            auto availableNumbers = _convertBitsToNumbers(cell.bits);
-//            std::cout << " ";
-//            if (availableNumbers.empty()) {
-//                std::cout << " ";
-//            } else if (availableNumbers.size() == 1) {
-//                std::cout << availableNumbers.front();
-//            } else {
-//                std::cout << "?";
-//            }
-//            count++;
-//            if (count % 3 == 0) {
-//                std::cout << " │";
-//            }
-//        }
+    int count = 0;
+    std::cout << "┌───────┬───────┬───────┐\n";
+    for (const auto &row : _board) {
+        std::cout << "│";
+        for (const auto &cell : row) {
+            auto availableNumbers = _convertBitsToNumbers(cell.bits);
+            std::cout << " ";
+            if (availableNumbers.empty()) {
+                std::cout << " ";
+            } else if (availableNumbers.size() == 1) {
+                std::cout << availableNumbers.front();
+            } else {
+                std::cout << "?";
+            }
+            count++;
+            if (count % 3 == 0) {
+                std::cout << " │";
+            }
+        }
 
-//        if (count % 27 == 0) {
-//            if (count == 81) {
-//                std::cout << "\n└───────┴───────┴───────┘";
-//            } else {
-//                std::cout << "\n├───────┼───────┼───────┤";
-//            }
-//        }
-//        std::cout << "\n";
-//    }
-//    std::cout << std::endl;
+        if (count % 27 == 0) {
+            if (count == 81) {
+                std::cout << "\n└───────┴───────┴───────┘";
+            } else {
+                std::cout << "\n├───────┼───────┼───────┤";
+            }
+        }
+        std::cout << "\n";
+    }
+    std::cout << std::endl;
 }

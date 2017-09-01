@@ -9,13 +9,18 @@
 
 bool SudokuSolver::solve(Sudoku &sudoku)
 {
+    for (int row = 0; row < 9; row++) {
+        for (int col = 0; col < 9; col++) {
+            sudoku.clearNumbersInCell(row, col);
+        }
+    }
     return _backtrackingEngine(sudoku);
 }
 
 bool SudokuSolver::_fillDeterministicCells(Sudoku &sudoku)
 {
     bool hasDeterministicBoxes = false;
-    
+
     for (int row = 0; row < 9; row++) {
         for (int col = 0; col < 9; col++) {
             if (sudoku.countNumbersInCell(row, col) == 0) {
@@ -33,13 +38,13 @@ bool SudokuSolver::_fillDeterministicCells(Sudoku &sudoku)
 bool SudokuSolver::_backtrackingEngine(Sudoku &sudoku)
 {
     Sudoku backup = sudoku;
-    
+
     while (_fillDeterministicCells(sudoku)) {}
-    
+
     if (sudoku.isSolved()) {
         return true;
     }
-    
+
     for (int row = 0; row < 9; row++) {
         for (int col = 0; col < 9; col++) {
             if (sudoku.countNumbersInCell(row, col) == 0) {
@@ -56,7 +61,7 @@ bool SudokuSolver::_backtrackingEngine(Sudoku &sudoku)
             }
         }
     }
-    
+
     sudoku = backup;
     return false;
 }

@@ -29,7 +29,8 @@ SOURCES += main.cpp \
     Engine/SudokuSolver.cpp \
     UI/Window.cpp \
     UI/SudokuView.cpp \
-    UI/SudokuController.cpp
+    UI/SudokuController.cpp \
+    UI/KeyboardView.cpp
 
 HEADERS += \
     Engine/Sudoku.h \
@@ -37,7 +38,8 @@ HEADERS += \
     Engine/SudokuSolver.h \
     UI/Window.h \
     UI/SudokuView.h \
-    UI/SudokuController.h
+    UI/SudokuController.h \
+    UI/KeyboardView.h
 
 FORMS += \
     UI/Window.ui

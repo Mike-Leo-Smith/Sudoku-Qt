@@ -35,7 +35,11 @@ public:
     void setInnerGridColor(QColor color);
     void setBackgroundColor(QColor color);
 
+    int selectedRow() const;
+    int selectedCol() const;
+
     void clearAllCells();
+    void deselectCell();
     void addNumberCell(NumberCell numberCell);
 
 private:
@@ -50,6 +54,8 @@ private:
     NumberCellList _numberCells;
     int _rowUnderMouse = -1;
     int _colUnderMouse = -1;
+    int _selectedRow = -1;
+    int _selectedCol = -1;
 
     void _drawGrids();
     void _drawNumbers();
@@ -57,9 +63,7 @@ private:
 
 signals:
     void cellSelected(int row, int col);
-
-public slots:
-
+    void cellDeselected(int row, int col);
 };
 
 #endif // SUDOKUVIEW_H
