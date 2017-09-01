@@ -15,6 +15,7 @@ private:
 
 public:
     explicit KeyboardView(QWidget *parent = nullptr);
+    void keyPressEvent(QKeyEvent *event) override;
 
 signals:
     void buttonClicked(int val);

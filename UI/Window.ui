@@ -126,8 +126,8 @@
   <widget class="KeyboardView" name="keyboardView" native="true">
    <property name="geometry">
     <rect>
-     <x>620</x>
-     <y>190</y>
+     <x>610</x>
+     <y>40</y>
      <width>281</width>
      <height>291</height>
     </rect>

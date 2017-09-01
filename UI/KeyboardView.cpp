@@ -1,6 +1,8 @@
 #include <QPushButton>
 #include <QString>
 #include <QLayout>
+#include <QDebug>
+#include <QKeyEvent>
 #include "KeyboardView.h"
 
 KeyboardView::KeyboardView(QWidget *parent) : QWidget(parent)
@@ -26,10 +28,11 @@ KeyboardView::KeyboardView(QWidget *parent) : QWidget(parent)
 void KeyboardView::setSelectedButtons(QVector<int> selectedNumbers)
 {
     setEnabled(true);
+
     for (auto button : _buttons) {
         button->setChecked(false);
     }
-
+    qDebug() << selectedNumbers;
     for (auto number : selectedNumbers) {
         if (_buttons.contains(number)) {
             _buttons[number]->setChecked(true);
@@ -45,4 +48,14 @@ void KeyboardView::setDisabled(bool isDisabled)
         }
     }
     QWidget::setDisabled(isDisabled);
+}
+
+void KeyboardView::keyPressEvent(QKeyEvent *event)
+{
+    if (isEnabled()) {
+        auto key = event->key();
+        if (key >= Qt::Key_1 && key <= Qt::Key_9) {
+            _buttons[key - Qt::Key_0]->click();
+        }
+    }
 }

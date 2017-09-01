@@ -15,7 +15,9 @@ class Window : public QWidget
 
 public:
     explicit Window(QWidget *parent = 0);
-    ~Window();
+    ~Window() override;
+
+    void keyPressEvent(QKeyEvent *event) override;
 
 private:
     Ui::Widget *ui;

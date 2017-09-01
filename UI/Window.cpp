@@ -32,6 +32,13 @@ Window::~Window()
     delete ui;
 }
 
+void Window::keyPressEvent(QKeyEvent *event)
+{
+    ui->sudokuView->keyPressEvent(event);
+    ui->keyboardView->keyPressEvent(event);
+    QWidget::keyPressEvent(event);
+}
+
 int Window::_clueCountForSelectedDifficulty() const
 {
     return 71 - 7 * ui->difficultyChoices->currentIndex();

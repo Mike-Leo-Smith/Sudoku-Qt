@@ -1,6 +1,8 @@
 #include <QPainter>
 #include <QFont>
 #include <QMouseEvent>
+#include <QDebug>
+#include <QKeyEvent>
 #include "SudokuView.h"
 
 SudokuView::SudokuView(QWidget *parent) : QOpenGLWidget(parent)
@@ -78,26 +80,50 @@ void SudokuView::resizeEvent(QResizeEvent *event)
 
 void SudokuView::mouseMoveEvent(QMouseEvent *event)
 {
-    _rowUnderMouse = (event->y() - _outerGridLineWidth * 0.5) / _cellLength;
-    _colUnderMouse = (event->x() - _outerGridLineWidth * 0.5) / _cellLength;
+    _currentRow = (event->y() - _outerGridLineWidth * 0.5) / _cellLength;
+    _currentCol = (event->x() - _outerGridLineWidth * 0.5) / _cellLength;
     update();
 }
 
-void SudokuView::mousePressEvent(QMouseEvent *event) {
+void SudokuView::mousePressEvent(QMouseEvent *event)
+{
     Q_UNUSED(event);
-    if (_selectedRow == _rowUnderMouse && _selectedCol == _colUnderMouse) {
-        _selectedRow = -1;
-        _selectedCol = -1;
-        emit cellDeselected(_selectedRow, _selectedCol);
+    toggleCurrentCellSelection();
+    update();
+}
+
+void SudokuView::keyPressEvent(QKeyEvent *event)
+{
+    qDebug() << "Key pressed!";
+
+    if (_currentRow < 0 || _currentRow >= 9 || _currentCol < 0 || _currentCol >= 9) {
+        _currentRow = 0;
+        _currentCol = 0;
     } else {
-        _selectedRow = _rowUnderMouse;
-        _selectedCol = _colUnderMouse;
-        emit cellSelected(_rowUnderMouse, _colUnderMouse);
+        switch (event->key()) {
+        case Qt::Key_Up:
+            if (_currentRow > 0) { _currentRow--; }
+            break;
+        case Qt::Key_Down:
+            if (_currentRow < 8) { _currentRow++; }
+            break;
+        case Qt::Key_Left:
+            if (_currentCol > 0) { _currentCol--; }
+            break;
+        case Qt::Key_Right:
+            if (_currentCol < 8) { _currentCol++; }
+            break;
+        case Qt::Key_Space:
+            toggleCurrentCellSelection();
+            break;
+        default:
+            break;
+        }
     }
     update();
 }
 
-void SudokuView::_displayNumbersInCell(const NumberCell &numberCell)
+void SudokuView::_drawNumbersInCell(const NumberCell &numberCell)
 {
     qreal numberSize = _cellLength;
     if (numberCell.numbers.size() > 1) {
@@ -107,7 +133,7 @@ void SudokuView::_displayNumbersInCell(const NumberCell &numberCell)
     QPainter painter(this);
     painter.setRenderHints(QPainter::TextAntialiasing | QPainter::Antialiasing);
 
-    if (_rowUnderMouse == numberCell.row && _colUnderMouse == numberCell.col) {
+    if (_currentRow == numberCell.row && _currentCol == numberCell.col) {
         painter.setPen(numberCell.color.lighter());
     } else {
         painter.setPen(numberCell.color);
@@ -183,7 +209,7 @@ void SudokuView::_drawGrids()
     };
 
     // Hightlight the cell under the mouse and the selected cell.
-    highlightCell(_rowUnderMouse, _colUnderMouse, _backgroundColor.lighter());
+    highlightCell(_currentRow, _currentCol, _backgroundColor.lighter());
     highlightCell(_selectedRow, _selectedCol, _backgroundColor.darker());
 }
 
@@ -191,7 +217,7 @@ void SudokuView::_drawNumbers()
 {
     for (const auto &numberCell : _numberCells) {
         if (!numberCell.numbers.empty()) {
-            _displayNumbersInCell(numberCell);
+            _drawNumbersInCell(numberCell);
         }
     }
 }
@@ -210,6 +236,20 @@ void SudokuView::deselectCell()
 {
     _selectedRow = -1;
     _selectedCol = -1;
-    _rowUnderMouse = -1;
-    _colUnderMouse = -1;
+}
+
+void SudokuView::selectCurrentCell()
+{
+    _selectedRow = _currentRow;
+    _selectedCol = _currentCol;
+    emit cellSelected(_currentRow, _currentCol);
+}
+
+void SudokuView::toggleCurrentCellSelection()
+{
+    if (_selectedRow == _currentRow && _selectedCol == _currentCol) {
+        deselectCell();
+    } else {
+        selectCurrentCell();
+    }
 }

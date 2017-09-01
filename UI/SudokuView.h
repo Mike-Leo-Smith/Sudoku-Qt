@@ -28,6 +28,7 @@ public:
     void resizeEvent(QResizeEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
     void setOuterGridLineWidth(int lineWidth);
     void setInnerGridLineWidth(int lineWidth);
@@ -38,8 +39,11 @@ public:
     int selectedRow() const;
     int selectedCol() const;
 
-    void clearAllCells();
     void deselectCell();
+    void selectCurrentCell();
+    void toggleCurrentCellSelection();
+
+    void clearAllCells();
     void addNumberCell(NumberCell numberCell);
 
 private:
@@ -52,18 +56,18 @@ private:
     QColor _outerGridColor = QColor(123, 104, 238);
     QColor _backgroundColor = QColor(216, 236, 222);
     NumberCellList _numberCells;
-    int _rowUnderMouse = -1;
-    int _colUnderMouse = -1;
+    int _currentRow = -1;
+    int _currentCol = -1;
     int _selectedRow = -1;
     int _selectedCol = -1;
 
     void _drawGrids();
     void _drawNumbers();
-    void _displayNumbersInCell(const NumberCell &numberCell);
+    void _drawNumbersInCell(const NumberCell &numberCell);
 
 signals:
     void cellSelected(int row, int col);
-    void cellDeselected(int row, int col);
+    //void cellDeselected(int row, int col);
 };
 
 #endif // SUDOKUVIEW_H
