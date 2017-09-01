@@ -39,6 +39,7 @@ public:
     ~SudokuController() override;
 
 public slots:
+    void generateBlankSudoku();
     void generateRandomSudoku(int preferredClueCount);
     void solveCurrentSudoku();
     void resetCurrentSudoku();
@@ -51,9 +52,10 @@ signals:
     void sudokuSolved(int id, Sudoku *solvedSudoku);
 
     void shouldSetMarkedNumbers(QVector<int> numbersInCell);
-    void shouldDisableKeyboard();
-    void canUndo(bool);
-    void canRedo(bool);
+    void shouldDisableKeyboard(bool);
+    void shouleDisableHints(bool);
+    void shouldDisableUndo(bool);
+    void shouldDisableRedo(bool);
 };
 
 #endif // SUDOKU_CONTROLLER_H

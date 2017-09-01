@@ -75,3 +75,15 @@ Sudoku SudokuCreator::random(int preferredClueCount)
 
     return finalBoard;
 }
+
+Sudoku SudokuCreator::blank()
+{
+    Sudoku sudoku;
+    for (auto &row : sudoku._board) {
+        for (auto &cell : row) {
+            cell.bits = 0;
+            cell.preset = true;
+        }
+    }
+    return sudoku;
+}

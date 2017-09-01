@@ -27,8 +27,6 @@ KeyboardView::KeyboardView(QWidget *parent) : QWidget(parent)
 
 void KeyboardView::setSelectedButtons(QVector<int> selectedNumbers)
 {
-    setEnabled(true);
-
     for (auto button : _buttons) {
         button->setChecked(false);
     }

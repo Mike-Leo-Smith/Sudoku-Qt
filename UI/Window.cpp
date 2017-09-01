@@ -8,27 +8,28 @@
 Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Widget)
 {
     ui->setupUi(this);
-    _sudokuController = new SudokuController(ui->sudokuView, this);
-    _sudokuController->generateRandomSudoku(_clueCountForSelectedDifficulty());
 
-    connect(ui->newgameButton, &QPushButton::clicked, [this] {
-        _sudokuController->generateRandomSudoku(_clueCountForSelectedDifficulty());
-    });
-    connect(ui->difficultyChoices, static_cast<void (QComboBox:: *)(int)>(&QComboBox::currentIndexChanged), [this](int newDifficulty){
-        _setDifficulty(newDifficulty);
-    });
+    _sudokuController = new SudokuController(ui->sudokuView, this);
+    _initializeGame();
+
+    connect(ui->newgameButton, &QPushButton::clicked, this, &Window::_startGame);
+    connect(ui->difficultyChoices, static_cast<void (QComboBox:: *)(int)>(&QComboBox::currentIndexChanged), this, &Window::_changeDifficulty);
     connect(ui->solveButton, &QPushButton::clicked, _sudokuController, &SudokuController::solveCurrentSudoku);
     connect(ui->keyboardView, &KeyboardView::buttonClicked, _sudokuController, &SudokuController::toggleNumberInSelectedCell);
     connect(ui->hintButton, &QPushButton::clicked, _sudokuController, &SudokuController::getHintsForSelectedCell);
-    connect(_sudokuController, &SudokuController::shouldSetMarkedNumbers, ui->keyboardView, &KeyboardView::setSelectedButtons);
-    connect(_sudokuController, &SudokuController::shouldDisableKeyboard, ui->keyboardView, [this] {
-        ui->keyboardView->setDisabled(true);
-    });
-    connect(ui->resetButton, &QPushButton::clicked, _sudokuController, &SudokuController::resetCurrentSudoku);
-    connect(_sudokuController, &SudokuController::canRedo, ui->redoButton, &QPushButton::setEnabled);
-    connect(_sudokuController, &SudokuController::canUndo, ui->undoButton, &QPushButton::setEnabled);
+    connect(ui->resetButton, &QPushButton::clicked, this, &Window::_restartGame);
     connect(ui->undoButton, &QPushButton::clicked, _sudokuController, &SudokuController::undo);
     connect(ui->redoButton, &QPushButton::clicked, _sudokuController, &SudokuController::redo);
+    connect(ui->pauseButton, &QPushButton::clicked, this, [this] {
+        ui->pauseButton->text() == "Pause" ? _pauseGame() : _resumeGame();
+    });
+
+    connect(_sudokuController, &SudokuController::shouleDisableHints, ui->hintButton, &QPushButton::setDisabled);
+    connect(_sudokuController, &SudokuController::shouldSetMarkedNumbers, ui->keyboardView, &KeyboardView::setSelectedButtons);
+    connect(_sudokuController, &SudokuController::shouldDisableKeyboard, ui->keyboardView, &KeyboardView::setDisabled);
+    connect(_sudokuController, &SudokuController::shouldDisableRedo, ui->redoButton, &QPushButton::setDisabled);
+    connect(_sudokuController, &SudokuController::shouldDisableUndo, ui->undoButton, &QPushButton::setDisabled);
+
 }
 
 Window::~Window()
@@ -48,17 +49,60 @@ int Window::_clueCountForSelectedDifficulty() const
     return 71 - 7 * ui->difficultyChoices->currentIndex();
 }
 
-void Window::_setDifficulty(int newDifficulty)
+void Window::_initializeGame()
+{
+    _sudokuController->generateBlankSudoku();
+    ui->resetButton->setDisabled(true);
+    ui->pauseButton->setText("Pause");
+    ui->pauseButton->setDisabled(true);
+    ui->hintButton->setDisabled(true);
+    ui->solveButton->setDisabled(true);
+    ui->stopwatchDisplay->reset();
+}
+
+void Window::_restartGame()
+{
+    _sudokuController->resetCurrentSudoku();
+    ui->resetButton->setEnabled(true);
+    ui->pauseButton->setText("Pause");
+    ui->pauseButton->setEnabled(true);
+    ui->solveButton->setEnabled(true);
+    ui->stopwatchDisplay->restart();
+}
+
+void Window::_startGame()
+{
+    _sudokuController->generateRandomSudoku(_clueCountForSelectedDifficulty());
+    ui->resetButton->setEnabled(true);
+    ui->pauseButton->setText("Pause");
+    ui->pauseButton->setEnabled(true);
+    ui->solveButton->setEnabled(true);
+    ui->stopwatchDisplay->restart();
+}
+
+void Window::_pauseGame()
+{
+    ui->pauseButton->setText("Resume");
+    ui->stopwatchDisplay->stop();
+}
+
+void Window::_resumeGame()
+{
+    ui->pauseButton->setText("Pause");
+    ui->stopwatchDisplay->start();
+}
+
+void Window::_changeDifficulty(int newDifficulty)
 {
     if (newDifficulty == _currentDifficulty) {
         return;
     }
 
-    auto message = "Do you want to start a new game with the selected difficulty?";
+    auto message = "Do you want to reset the game with the selected difficulty?";
     auto answer = QMessageBox::information(this, "Message", message, QMessageBox::Ok | QMessageBox::Cancel);
     if (answer == QMessageBox::Ok) {
         _currentDifficulty = newDifficulty;
-        _sudokuController->generateRandomSudoku(_clueCountForSelectedDifficulty());
+        _initializeGame();
     } else {
         ui->difficultyChoices->setCurrentIndex(_currentDifficulty);
     }

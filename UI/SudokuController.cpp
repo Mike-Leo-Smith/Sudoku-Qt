@@ -49,7 +49,6 @@ void SudokuController::_resetUndoAndRedoStack()
     QTimer::singleShot(0, this, [this] {
         _undoStack.clear();
         _redoStack.clear();
-        _updateSudokuStacks();
     });
 }
 
@@ -58,6 +57,15 @@ void SudokuController::generateRandomSudoku(int preferredClueCount)
     _currentSudokuIndex++;
     _setCurrentSudoku(SudokuCreator::random(preferredClueCount));
     _resetUndoAndRedoStack();
+    _updateSudokuStacks();
+}
+
+void SudokuController::generateBlankSudoku()
+{
+    _currentSudokuIndex++;
+    _setCurrentSudoku(SudokuCreator::blank());
+    _resetUndoAndRedoStack();
+    _updateSudokuStacks();
 }
 
 void SudokuController::solveCurrentSudoku()
@@ -92,14 +100,17 @@ void SudokuController::_updateSudokuView()
         auto selectedCol = _sudokuView->selectedCol();
 
         if (_sudoku.isImmutable(selectedRow, selectedCol)) {
-            emit shouldDisableKeyboard();
+            emit shouldDisableKeyboard(true);
+            emit shouleDisableHints(true);
         } else {
             auto numbersInCell = _sudoku.getNumbersInCell(selectedRow, selectedCol);
+            emit shouldDisableKeyboard(false);
             emit shouldSetMarkedNumbers(QVector<int>::fromStdVector(numbersInCell));
+            emit shouleDisableHints(false);
         }
 
-        emit canUndo(_isAbleToUndo());
-        emit canRedo(_isAbleToRedo());
+        emit shouldDisableUndo(!_isAbleToUndo());
+        emit shouldDisableRedo(!_isAbleToRedo());
     });
     _sudokuView->update();
 }

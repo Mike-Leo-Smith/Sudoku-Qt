@@ -25,7 +25,14 @@ private:
     int _currentDifficulty;
 
     int _clueCountForSelectedDifficulty() const;
-    void _setDifficulty(int newDifficulty);
+
+private slots:
+    void _initializeGame();
+    void _startGame();
+    void _pauseGame();
+    void _restartGame();
+    void _resumeGame();
+    void _changeDifficulty(int newDifficulty);
 };
 
 #endif // WIDGET_H
