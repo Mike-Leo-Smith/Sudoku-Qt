@@ -72,9 +72,7 @@ void SudokuView::resizeEvent(QResizeEvent *event)
     _boardLength = std::min(roundedWidth, roundedHeight);
     _regionLength = _boardLength / 3;
     _cellLength = _boardLength / 9;
-
     resize(_boardLength + _outerGridLineWidth, _boardLength + _outerGridLineWidth);
-
     update();
 }
 

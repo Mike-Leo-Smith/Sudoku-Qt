@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>937</width>
-    <height>674</height>
+    <width>808</width>
+    <height>524</height>
    </rect>
   </property>
   <property name="font">
@@ -21,144 +21,200 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <widget class="SudokuView" name="sudokuView">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>571</width>
-     <height>601</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="newgameButton">
-   <property name="geometry">
-    <rect>
-     <x>430</x>
-     <y>630</y>
-     <width>113</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
-   <property name="text">
-    <string>New Game</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="difficultyChoices">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>630</y>
-     <width>111</width>
-     <height>31</height>
-    </rect>
-   </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_5">
    <item>
-    <property name="text">
-     <string>Starter</string>
-    </property>
+    <widget class="SudokuView" name="sudokuView">
+     <property name="minimumSize">
+      <size>
+       <width>500</width>
+       <height>500</height>
+      </size>
+     </property>
+     <property name="baseSize">
+      <size>
+       <width>500</width>
+       <height>500</height>
+      </size>
+     </property>
+    </widget>
    </item>
    <item>
-    <property name="text">
-     <string>Easy</string>
-    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLCDNumber" name="timerLCD">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>70</height>
+        </size>
+       </property>
+       <property name="digitCount">
+        <number>7</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KeyboardView" name="keyboardView" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>150</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>30</pointsize>
+        </font>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QComboBox" name="difficultyChoices">
+         <item>
+          <property name="text">
+           <string>Starter</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Easy</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Leisure</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Medium</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Hard</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Professional</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Master</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Crazy</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Hell</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Impossible</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="newgameButton">
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="text">
+          <string>New Game</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QPushButton" name="pauseButton">
+         <property name="text">
+          <string>Pause</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="resetButton">
+         <property name="text">
+          <string>Restart</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QPushButton" name="undoButton">
+         <property name="text">
+          <string>Undo</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="redoButton">
+         <property name="text">
+          <string>Redo</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QPushButton" name="solveButton">
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Answer</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="hintButton">
+         <property name="text">
+          <string>Hints</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </item>
-   <item>
-    <property name="text">
-     <string>Leisure</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Medium</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Hard</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Professional</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Master</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Crazy</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Hell</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Impossible</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QPushButton" name="solveButton">
-   <property name="geometry">
-    <rect>
-     <x>550</x>
-     <y>630</y>
-     <width>113</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="autoFillBackground">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string>Answer</string>
-   </property>
-  </widget>
-  <widget class="KeyboardView" name="keyboardView" native="true">
-   <property name="geometry">
-    <rect>
-     <x>610</x>
-     <y>40</y>
-     <width>281</width>
-     <height>291</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="hintButton">
-   <property name="geometry">
-    <rect>
-     <x>660</x>
-     <y>630</y>
-     <width>113</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Hints</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="resetButton">
-   <property name="geometry">
-    <rect>
-     <x>280</x>
-     <y>630</y>
-     <width>113</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Restart</string>
-   </property>
-  </widget>
+  </layout>
+  <zorder>sudokuView</zorder>
+  <zorder>newgameButton</zorder>
+  <zorder>difficultyChoices</zorder>
+  <zorder>solveButton</zorder>
+  <zorder>keyboardView</zorder>
+  <zorder>hintButton</zorder>
+  <zorder>resetButton</zorder>
+  <zorder>undoButton</zorder>
+  <zorder>redoButton</zorder>
+  <zorder>pauseButton</zorder>
+  <zorder></zorder>
+  <zorder></zorder>
+  <zorder>timerLCD</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

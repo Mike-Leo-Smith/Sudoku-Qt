@@ -25,6 +25,10 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Widget)
         ui->keyboardView->setDisabled(true);
     });
     connect(ui->resetButton, &QPushButton::clicked, _sudokuController, &SudokuController::resetCurrentSudoku);
+    connect(_sudokuController, &SudokuController::canRedo, ui->redoButton, &QPushButton::setEnabled);
+    connect(_sudokuController, &SudokuController::canUndo, ui->undoButton, &QPushButton::setEnabled);
+    connect(ui->undoButton, &QPushButton::clicked, _sudokuController, &SudokuController::undo);
+    connect(ui->redoButton, &QPushButton::clicked, _sudokuController, &SudokuController::redo);
 }
 
 Window::~Window()

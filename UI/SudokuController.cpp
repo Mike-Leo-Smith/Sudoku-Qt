@@ -27,25 +27,48 @@ void SudokuController::_setCurrentSudoku(const Sudoku &sudoku)
 {
     QTimer::singleShot(0, this, [this, sudoku] {
         _sudoku = sudoku;
-        _sudokuView->deselectCell();
         _updateSudokuView();
+        _sudokuView->deselectCell();
+    });
+}
+
+void SudokuController::_updateSudokuStacks()
+{
+    if (!_redoStack.empty()) {
+        auto copy = _undoStack.top();
+        while (!_redoStack.empty()) {
+            _undoStack.push(_redoStack.pop());
+        }
+        _undoStack.push(copy);
+    }
+    _undoStack.push(qMakePair(_currentOperationIndex++, _sudoku));
+}
+
+void SudokuController::_resetUndoAndRedoStack()
+{
+    QTimer::singleShot(0, this, [this] {
+        _undoStack.clear();
+        _redoStack.clear();
+        _updateSudokuStacks();
     });
 }
 
 void SudokuController::generateRandomSudoku(int preferredClueCount)
 {
-    _playCount++;
+    _currentSudokuIndex++;
     _setCurrentSudoku(SudokuCreator::random(preferredClueCount));
+    _resetUndoAndRedoStack();
 }
 
 void SudokuController::solveCurrentSudoku()
 {
     _solvingProgress = QtConcurrent::run([this] {
-        auto id = _playCount;
+        auto id = _currentSudokuIndex;
         auto sudoku = _sudoku;
         SudokuSolver::solve(sudoku);
-        if (id == _playCount) {
+        if (id == _currentSudokuIndex) {
             _setCurrentSudoku(sudoku);
+            _resetUndoAndRedoStack();
         }
     });
 }
@@ -74,6 +97,9 @@ void SudokuController::_updateSudokuView()
             auto numbersInCell = _sudoku.getNumbersInCell(selectedRow, selectedCol);
             emit shouldSetMarkedNumbers(QVector<int>::fromStdVector(numbersInCell));
         }
+
+        emit canUndo(_isAbleToUndo());
+        emit canRedo(_isAbleToRedo());
     });
     _sudokuView->update();
 }
@@ -81,6 +107,7 @@ void SudokuController::_updateSudokuView()
 void SudokuController::resetCurrentSudoku()
 {
     _sudoku.reset();
+    _resetUndoAndRedoStack();
     _updateSudokuView();
 }
 
@@ -88,8 +115,8 @@ void SudokuController::toggleNumberInSelectedCell(int number)
 {
     int selectedRow = _sudokuView->selectedRow();
     int selectedCol = _sudokuView->selectedCol();
-
     _sudoku.toggleNumberInCell(selectedRow, selectedCol, number);
+    _updateSudokuStacks();
     _updateSudokuView();
 }
 
@@ -97,8 +124,43 @@ void SudokuController::getHintsForSelectedCell()
 {
     int selectedRow = _sudokuView->selectedRow();
     int selectedCol = _sudokuView->selectedCol();
-
     auto availableNumbers = _sudoku.getAvailableNumbersForCell(selectedRow, selectedCol);
     _sudoku.setNumbersInCell(selectedRow, selectedCol, availableNumbers);
+    _updateSudokuStacks();
     _updateSudokuView();
 }
+
+void SudokuController::undo()
+{
+    qDebug() << "Asked to undo...";
+    if (_isAbleToUndo()) {
+        _redoStack.push(_undoStack.pop());
+        _setCurrentSudoku(_undoStack.top().second);
+        qDebug() << "    and succeeded.";
+    }
+}
+
+void SudokuController::redo()
+{
+    qDebug() << "Asked to redo";
+    if (_isAbleToRedo()) {
+        auto operation = _redoStack.pop();
+        qDebug() << "  operation" << operation.first;
+        _setCurrentSudoku(operation.second);
+        _undoStack.push(operation);
+        qDebug() << "    and succeeded.";
+    }
+}
+
+bool SudokuController::_isAbleToUndo()
+{
+    return _undoStack.size() > 1;
+}
+
+bool SudokuController::_isAbleToRedo()
+{
+    return !_redoStack.empty();
+}
+
+
+
