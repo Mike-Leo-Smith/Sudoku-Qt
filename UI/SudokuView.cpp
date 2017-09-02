@@ -1,7 +1,6 @@
 #include <QPainter>
 #include <QFont>
 #include <QMouseEvent>
-#include <QDebug>
 #include <QKeyEvent>
 #include <QImage>
 #include <QLabel>

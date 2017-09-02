@@ -1,5 +1,4 @@
 #include <QPainter>
-#include <QDebug>
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <QLabel>

@@ -1,7 +1,6 @@
 #include <QPushButton>
 #include <QString>
 #include <QLayout>
-#include <QDebug>
 #include <QPixmap>
 #include <QKeyEvent>
 #include "KeyboardView.h"
@@ -61,7 +60,6 @@ void KeyboardView::setSelectedButtons(QVector<int> selectedKeyIDs)
     for (auto button : _buttons) {
         button->setChecked(false);
     }
-    qDebug() << selectedKeyIDs;
     for (auto number : selectedKeyIDs) {
         if (_buttons.contains(number)) {
             _buttons[number]->setChecked(true);
