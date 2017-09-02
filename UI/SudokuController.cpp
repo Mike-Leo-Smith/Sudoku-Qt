@@ -24,10 +24,10 @@ SudokuController::~SudokuController()
     _solvingProgress.waitForFinished();
 }
 
-void SudokuController::setGameRunning(bool isRunning)
+void SudokuController::setGameState(GameState state)
 {
-    _gameRunning = isRunning;
-    _sudokuView->setGameRunning(isRunning);
+    _gameState = state;
+    _sudokuView->setGameState(state);
     _updateSudokuView();
 }
 
@@ -126,7 +126,7 @@ void SudokuController::_updateSudokuView()
             });
         }
 
-        if (_sudoku.isImmutable(selectedRow, selectedCol) || !_gameRunning) {
+        if (_sudoku.isImmutable(selectedRow, selectedCol) || _gameState != GameState::inGame) {
             emit shouldDisableKeyboard(true);
         } else {
             auto checkedKeyIDs = std::move(addedNumbers);
@@ -136,8 +136,8 @@ void SudokuController::_updateSudokuView()
             emit shouldDisableKeyboard(false);
             emit shouldSetMarkedNumbers(QVector<int>::fromStdVector(checkedKeyIDs));
         }
-        emit shouldDisableUndo(!_isAbleToUndo() || !_gameRunning);
-        emit shouldDisableRedo(!_isAbleToRedo() || !_gameRunning);
+        emit shouldDisableUndo(!_isAbleToUndo() || _gameState != GameState::inGame);
+        emit shouldDisableRedo(!_isAbleToRedo() || _gameState != GameState::inGame);
     });
     _sudokuView->update();
 }
@@ -156,6 +156,10 @@ void SudokuController::toggleNumberInSelectedCell(int number)
     _sudoku.toggleNumberInCell(selectedRow, selectedCol, number);
     _updateSudokuStacks();
     _updateSudokuView();
+
+    if (_sudoku.isSolved()) {
+        emit sudokuSolved();
+    }
 }
 
 void SudokuController::getHintsForSelectedCell()
@@ -166,6 +170,10 @@ void SudokuController::getHintsForSelectedCell()
     _sudoku.setNumbersInCell(selectedRow, selectedCol, availableNumbers);
     _updateSudokuStacks();
     _updateSudokuView();
+
+    if (_sudoku.isSolved()) {
+        emit sudokuSolved();
+    }
 }
 
 void SudokuController::clearNumbersInSelectedCell()
@@ -188,23 +196,18 @@ void SudokuController::toggleSelectedCellMark()
 
 void SudokuController::undo()
 {
-    qDebug() << "Asked to undo...";
     if (_isAbleToUndo()) {
         _redoStack.push(_undoStack.pop());
         _setCurrentSudoku(_undoStack.top().second);
-        qDebug() << "    and succeeded.";
     }
 }
 
 void SudokuController::redo()
 {
-    qDebug() << "Asked to redo";
     if (_isAbleToRedo()) {
         auto operation = _redoStack.pop();
-        qDebug() << "  operation" << operation.first;
         _setCurrentSudoku(operation.second);
         _undoStack.push(operation);
-        qDebug() << "    and succeeded.";
     }
 }
 

@@ -1,7 +1,8 @@
 <RCC>
     <qresource prefix="/">
-        <file>Images/Flag.jpg</file>
-        <file>Images/Clear.jpg</file>
-        <file>Images/Hint.jpg</file>
+        <file>Images/Clear.png</file>
+        <file>Images/Flag.png</file>
+        <file>Images/Hint.png</file>
+        <file>Images/Icon.png</file>
     </qresource>
 </RCC>

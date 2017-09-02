@@ -6,6 +6,7 @@
 #include <QFuture>
 #include <QVector>
 #include "../Engine/Sudoku.h"
+#include "GameState.h"
 
 class SudokuView;
 
@@ -20,7 +21,7 @@ private:
     int _currentOperationIndex = 0;
     int _currentSudokuIndex = 0;
 
-    bool _gameRunning = false;
+    GameState _gameState = GameState::initial;
 
     Sudoku _sudoku;
     SudokuView *_sudokuView;
@@ -49,13 +50,12 @@ public slots:
     void getHintsForSelectedCell();
     void clearNumbersInSelectedCell();
     void toggleSelectedCellMark();
-    void setGameRunning(bool isRunning);
+    void setGameState(GameState state);
     void undo();
     void redo();
 
 signals:
-    void sudokuSolved(int id, Sudoku *solvedSudoku);
-
+    void sudokuSolved();
     void shouldSetMarkedNumbers(QVector<int> numbersInCell);
     void shouldDisableKeyboard(bool);
     void shouldDisableUndo(bool);

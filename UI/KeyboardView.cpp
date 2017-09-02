@@ -38,19 +38,19 @@ KeyboardView::KeyboardView(QWidget *parent) : QWidget(parent)
     outerLayout->addLayout(functionalKeyLayout);
 
     auto clearButton = buttonWithText();
-    clearButton->setIcon(QIcon(":/Images/Clear.jpg"));
+    clearButton->setIcon(QIcon(":/Images/Clear.png"));
     clearButton->setIconSize(clearButton->size());
     registerButton(clearButton, static_cast<int>(FunctionalKeyID::clear), functionalKeyLayout);
     connect(clearButton, &QPushButton::clicked, this, &KeyboardView::shouldClearNumbersInCell);
 
     auto markButton = buttonWithText();
-    markButton->setIcon(QIcon(":/Images/Flag.jpg"));
+    markButton->setIcon(QIcon(":/Images/Flag.png"));
     markButton->setIconSize(markButton->size());
     registerButton(markButton, static_cast<int>(FunctionalKeyID::mark), functionalKeyLayout);
     connect(markButton, &QPushButton::clicked, this, &KeyboardView::shouldToggleCellMark);
 
     auto hintButton = buttonWithText();
-    hintButton->setIcon(QIcon(":/Images/Hint.jpg"));
+    hintButton->setIcon(QIcon(":/Images/Hint.png"));
     hintButton->setIconSize(hintButton->size());
     registerButton(hintButton, static_cast<int>(FunctionalKeyID::hint), functionalKeyLayout);
     connect(hintButton, &QPushButton::clicked, this, &KeyboardView::shouldGetHintsForCell);

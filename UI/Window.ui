@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>784</width>
-    <height>526</height>
+    <width>759</width>
+    <height>528</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -26,6 +26,13 @@
   </property>
   <property name="windowTitle">
    <string>Sudoku</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../Assets/assets.qrc">
+    <normaloff>:/Images/Icon.png</normaloff>:/Images/Icon.png</iconset>
+  </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -148,7 +155,6 @@
           <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
-        <zorder>groupBox</zorder>
        </widget>
       </item>
       <item>
@@ -323,6 +329,8 @@
    <header>UI/StopwatchView.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../Assets/assets.qrc"/>
+ </resources>
  <connections/>
 </ui>

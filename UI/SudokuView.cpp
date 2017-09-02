@@ -55,17 +55,13 @@ void SudokuView::reset()
     update();
 }
 
-void SudokuView::setGameRunning(bool isRunning)
+void SudokuView::setGameState(GameState state)
 {
-    _gameRunning = isRunning;
+    _gameState = state;
     if (auto blurEffect = dynamic_cast<QGraphicsBlurEffect *>(graphicsEffect())) {
-        blurEffect->setEnabled(!_gameRunning);
+        bool shouldEnableEffect = (_gameState == GameState::initial) || (_gameState == GameState::paused);
+        blurEffect->setEnabled(shouldEnableEffect);
         blurEffect->setBlurRadius(_cellLength);
-//        QPropertyAnimation animation(blurEffect, "blurRadius", this);
-//        animation.setDuration(1000);
-//        animation.setStartValue(1);
-//        animation.setEndValue(50);
-//        animation.start();
     }
 }
 
@@ -83,13 +79,6 @@ void SudokuView::paintEvent(QPaintEvent *event)
     _highlightSelectedCell();
     _highlightCurrentCell();
     _drawNumbers();
-    _useGaussianBlurEffect();
-}
-
-void SudokuView::_useGaussianBlurEffect()
-{
-    //QPainter painter(this);
-    //render(&painter);
 }
 
 void SudokuView::resizeEvent(QResizeEvent *event)
@@ -112,7 +101,7 @@ void SudokuView::resizeEvent(QResizeEvent *event)
 
 void SudokuView::mouseMoveEvent(QMouseEvent *event)
 {
-    if (!_gameRunning) {
+    if (_gameState != GameState::inGame) {
         return;
     }
 
@@ -123,7 +112,7 @@ void SudokuView::mouseMoveEvent(QMouseEvent *event)
 
 void SudokuView::mousePressEvent(QMouseEvent *event)
 {
-    if (!_gameRunning) {
+    if (_gameState != GameState::inGame) {
         return;
     }
 
@@ -134,7 +123,7 @@ void SudokuView::mousePressEvent(QMouseEvent *event)
 
 void SudokuView::keyPressEvent(QKeyEvent *event)
 {
-    if (!_gameRunning) {
+    if (_gameState != GameState::inGame) {
         return;
     }
 

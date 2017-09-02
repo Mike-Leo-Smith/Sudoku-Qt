@@ -31,7 +31,8 @@ SOURCES += main.cpp \
     UI/SudokuView.cpp \
     UI/SudokuController.cpp \
     UI/KeyboardView.cpp \
-    UI/StopwatchView.cpp
+    UI/StopwatchView.cpp \
+    UI/BannerView.cpp
 
 HEADERS += \
     Engine/Sudoku.h \
@@ -41,7 +42,9 @@ HEADERS += \
     UI/SudokuView.h \
     UI/SudokuController.h \
     UI/KeyboardView.h \
-    UI/StopwatchView.h
+    UI/StopwatchView.h \
+    UI/GameState.h \
+    UI/BannerView.h
 
 FORMS += \
     UI/Window.ui

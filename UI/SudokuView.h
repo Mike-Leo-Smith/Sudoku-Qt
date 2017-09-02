@@ -6,6 +6,7 @@
 #include <QPoint>
 #include <QSet>
 #include <QGraphicsBlurEffect>
+#include "GameState.h"
 
 class SudokuView : public QWidget
 {
@@ -52,7 +53,7 @@ public:
     void toggleCurrentCellSelection();
 
     void reset();
-    void setGameRunning(bool);
+    void setGameState(GameState state);
     void addNumberCell(NumberCell numberCell);
     void addHighlightedCell(HighlightedCell highlightedCell);
 
@@ -71,7 +72,8 @@ private:
     int _currentCol = -1;
     int _selectedRow = -1;
     int _selectedCol = -1;
-    bool _gameRunning = false;
+
+    GameState _gameState = GameState::initial;
 
     void _drawGrids();
     void _highlightCell(const HighlightedCell &highlightedCell);
@@ -80,7 +82,6 @@ private:
     void _highlightCurrentCell();
     void _drawNumbers();
     void _drawNumbersInCell(const NumberCell &numberCell);
-    void _useGaussianBlurEffect();
 
 signals:
     void cellSelectionToggled(int row, int col);

@@ -2,6 +2,8 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include "GameState.h"
+#include "BannerView.h"
 
 namespace Ui {
     class Widget;
@@ -23,21 +25,26 @@ public:
 private:
     Ui::Widget *ui;
     SudokuController *_sudokuController;
+    BannerView *_bannerView;
     int _currentDifficulty;
-
     int _clueCountForSelectedDifficulty() const;
+    GameState _gameState = GameState::initial;
 
 private slots:
     void _initializeGame();
+    void _finishGame();
     void _startGame();
     void _pauseGame();
     void _restartGame();
     void _resumeGame();
     void _solveGame();
     void _changeDifficulty(int newDifficulty);
+    void _setGameState(GameState state);
+    bool _askForConfirmation(QString message);
 
 signals:
     void shouldGameRun(bool);
+    void gameStateChanged(GameState gameState);
 };
 
 #endif // WIDGET_H
