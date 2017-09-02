@@ -13,6 +13,12 @@ class SudokuView : public QOpenGLWidget
 public:
     using NumberList = QVector<int>;
 
+    struct HighlightedCell {
+        int row;
+        int col;
+        QColor color;
+    };
+
     struct NumberCell {
         int row;
         int col;
@@ -21,6 +27,7 @@ public:
     };
 
     using NumberCellList = QVector<NumberCell>;
+    using HighlightedCellList = QVector<HighlightedCell>;
 
     explicit SudokuView(QWidget *parent = nullptr);
     ~SudokuView() override = default;
@@ -43,8 +50,9 @@ public:
     void selectCurrentCell();
     void toggleCurrentCellSelection();
 
-    void clearAllCells();
+    void reset();
     void addNumberCell(NumberCell numberCell);
+    void addHighlightedCell(HighlightedCell highlightedCell);
 
 private:
     int _boardLength = 0;
@@ -56,12 +64,17 @@ private:
     QColor _outerGridColor = QColor(123, 104, 238);
     QColor _backgroundColor = QColor(216, 236, 222);
     NumberCellList _numberCells;
+    HighlightedCellList _highlightedCells;
     int _currentRow = -1;
     int _currentCol = -1;
     int _selectedRow = -1;
     int _selectedCol = -1;
 
     void _drawGrids();
+    void _highlightCell(const HighlightedCell &highlightedCell);
+    void _drawHighlightedCells();
+    void _highlightSelectedCell();
+    void _highlightCurrentCell();
     void _drawNumbers();
     void _drawNumbersInCell(const NumberCell &numberCell);
 

@@ -7,31 +7,55 @@
 
 KeyboardView::KeyboardView(QWidget *parent) : QWidget(parent)
 {
+    auto buttonWithText = [this](QString text) {
+        auto button = new QPushButton(text, this);
+        button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        button->setCheckable(true);
+        return button;
+    };
+
+    auto registerButton = [this](QPushButton *button, int id, QLayout *layout) {
+        layout->addWidget(button);
+        _buttons.insert(id, button);
+    };
+
     auto outerLayout = new QVBoxLayout(this);
     for (int row = 0; row < 3; row++) {
         auto rowLayout = new QHBoxLayout;
         for (int col = 0; col < 3; col++) {
-            auto number = row * 3 + col + 1;
-            auto button = new QPushButton(QString::number(number), this);
-            button->setCheckable(true);
-            button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-            rowLayout->addWidget(button);
-            _buttons.insert(number, button);
-            connect(button, &QPushButton::clicked, this, [this, number]() {
-                emit buttonClicked(number);
+            int number = row * 3 + col + 1;
+            auto button = buttonWithText(QString::number(number));
+            registerButton(button, number, rowLayout);
+            connect(button, &QPushButton::clicked, this, [this, number] {
+                emit shouldToggleNumberInCell(number);
             });
         }
         outerLayout->addLayout(rowLayout);
     }
+
+    auto functionalKeyLayout = new QHBoxLayout;
+    outerLayout->addLayout(functionalKeyLayout);
+
+    auto clearButton = buttonWithText(QString("C"));
+    registerButton(clearButton, static_cast<int>(FunctionalKeyID::clear), functionalKeyLayout);
+    connect(clearButton, &QPushButton::clicked, this, &KeyboardView::shouldClearNumbersInCell);
+
+    auto markButton = buttonWithText(QString("M"));
+    registerButton(markButton, static_cast<int>(FunctionalKeyID::mark), functionalKeyLayout);
+    connect(markButton, &QPushButton::clicked, this, &KeyboardView::shouldToggleCellMark);
+
+    auto highlightButton = buttonWithText("H");
+    registerButton(highlightButton, static_cast<int>(FunctionalKeyID::highlight), functionalKeyLayout);
+    connect(highlightButton, &QPushButton::clicked, this, &KeyboardView::shouldHighlightSameNumbers);
 }
 
-void KeyboardView::setSelectedButtons(QVector<int> selectedNumbers)
+void KeyboardView::setSelectedButtons(QVector<int> selectedKeyIDs)
 {
     for (auto button : _buttons) {
         button->setChecked(false);
     }
-    qDebug() << selectedNumbers;
-    for (auto number : selectedNumbers) {
+    qDebug() << selectedKeyIDs;
+    for (auto number : selectedKeyIDs) {
         if (_buttons.contains(number)) {
             _buttons[number]->setChecked(true);
         }

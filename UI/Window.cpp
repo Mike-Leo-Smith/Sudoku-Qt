@@ -15,7 +15,6 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Widget)
     connect(ui->newgameButton, &QPushButton::clicked, this, &Window::_startGame);
     connect(ui->difficultyChoices, static_cast<void (QComboBox:: *)(int)>(&QComboBox::currentIndexChanged), this, &Window::_changeDifficulty);
     connect(ui->solveButton, &QPushButton::clicked, _sudokuController, &SudokuController::solveCurrentSudoku);
-    connect(ui->keyboardView, &KeyboardView::buttonClicked, _sudokuController, &SudokuController::toggleNumberInSelectedCell);
     connect(ui->hintButton, &QPushButton::clicked, _sudokuController, &SudokuController::getHintsForSelectedCell);
     connect(ui->resetButton, &QPushButton::clicked, this, &Window::_restartGame);
     connect(ui->undoButton, &QPushButton::clicked, _sudokuController, &SudokuController::undo);
@@ -30,6 +29,10 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Widget)
     connect(_sudokuController, &SudokuController::shouldDisableRedo, ui->redoButton, &QPushButton::setDisabled);
     connect(_sudokuController, &SudokuController::shouldDisableUndo, ui->undoButton, &QPushButton::setDisabled);
 
+    connect(ui->keyboardView, &KeyboardView::shouldToggleCellMark, _sudokuController, &SudokuController::toggleSelectedCellMark);
+    connect(ui->keyboardView, &KeyboardView::shouldToggleNumberInCell, _sudokuController, &SudokuController::toggleNumberInSelectedCell);
+    connect(ui->keyboardView, &KeyboardView::shouldClearNumbersInCell, _sudokuController, &SudokuController::clearNumbersInSelectedCell);
+    connect(ui->keyboardView, &KeyboardView::shouldHighlightSameNumbers, _sudokuController, &SudokuController::highlightSameNumbersOfSelectedCell);
 }
 
 Window::~Window()

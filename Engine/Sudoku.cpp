@@ -11,6 +11,7 @@ Sudoku::Sudoku()
         for (auto &cell : row) {
             cell.bits = 0;
             cell.preset = false;
+            cell.marked = false;
         }
     }
 }
@@ -66,6 +67,20 @@ std::vector<int> Sudoku::getNumbersInCell(int row, int col) const
 bool Sudoku::isImmutable(int row, int col) const
 {
     return !_isInBoard(row, col) || _board[row][col].preset;
+}
+
+bool Sudoku::isMarked(int row, int col) const
+{
+    return _isInBoard(row, col) && _board[row][col].marked;
+}
+
+bool Sudoku::toggleCellMark(int row, int col)
+{
+    if (isImmutable(row, col)) {
+        return false;
+    }
+    _board[row][col].marked = !_board[row][col].marked;
+    return true;
 }
 
 bool Sudoku::clearNumbersInCell(int row, int col)

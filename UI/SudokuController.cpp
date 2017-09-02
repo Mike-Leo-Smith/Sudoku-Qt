@@ -1,6 +1,7 @@
 #include <QtConcurrent/QtConcurrent>
 #include <QFuture>
 #include <QTimer>
+#include "KeyboardView.h"
 #include "SudokuController.h"
 #include "SudokuView.h"
 #include "../Engine/Sudoku.h"
@@ -84,15 +85,18 @@ void SudokuController::solveCurrentSudoku()
 void SudokuController::_updateSudokuView()
 {
     QTimer::singleShot(0, _sudokuView, [this] {
-        _sudokuView->clearAllCells();
+        _sudokuView->reset();
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
                 auto numbers = _sudoku.getNumbersInCell(row, col);
                 auto isPreset = _sudoku.isImmutable(row, col);
                 SudokuView::NumberCell numberCell = {
-                    row, col, SudokuView::NumberList::fromStdVector(numbers), (isPreset ? QColor(60, 50, 70) : Qt::red)
+                    row, col, SudokuView::NumberList::fromStdVector(numbers), (isPreset ? QColor(60, 50, 70) : QColor(Qt::green).darker())
                 };
                 _sudokuView->addNumberCell(numberCell);
+                if (_sudoku.isMarked(row, col)) {
+                    _sudokuView->addHighlightedCell({ row, col, Qt::yellow });
+                }
             }
         }
 
@@ -103,12 +107,14 @@ void SudokuController::_updateSudokuView()
             emit shouldDisableKeyboard(true);
             emit shouleDisableHints(true);
         } else {
-            auto numbersInCell = _sudoku.getNumbersInCell(selectedRow, selectedCol);
+            auto checkedKeyIDs = _sudoku.getNumbersInCell(selectedRow, selectedCol);
+            if (_sudoku.isMarked(selectedRow, selectedCol)) {
+                checkedKeyIDs.push_back(static_cast<int>(KeyboardView::FunctionalKeyID::mark));
+            }
             emit shouldDisableKeyboard(false);
-            emit shouldSetMarkedNumbers(QVector<int>::fromStdVector(numbersInCell));
+            emit shouldSetMarkedNumbers(QVector<int>::fromStdVector(checkedKeyIDs));
             emit shouleDisableHints(false);
         }
-
         emit shouldDisableUndo(!_isAbleToUndo());
         emit shouldDisableRedo(!_isAbleToRedo());
     });
@@ -124,8 +130,8 @@ void SudokuController::resetCurrentSudoku()
 
 void SudokuController::toggleNumberInSelectedCell(int number)
 {
-    int selectedRow = _sudokuView->selectedRow();
-    int selectedCol = _sudokuView->selectedCol();
+    auto selectedRow = _sudokuView->selectedRow();
+    auto selectedCol = _sudokuView->selectedCol();
     _sudoku.toggleNumberInCell(selectedRow, selectedCol, number);
     _updateSudokuStacks();
     _updateSudokuView();
@@ -133,12 +139,35 @@ void SudokuController::toggleNumberInSelectedCell(int number)
 
 void SudokuController::getHintsForSelectedCell()
 {
-    int selectedRow = _sudokuView->selectedRow();
-    int selectedCol = _sudokuView->selectedCol();
+    auto selectedRow = _sudokuView->selectedRow();
+    auto selectedCol = _sudokuView->selectedCol();
     auto availableNumbers = _sudoku.getAvailableNumbersForCell(selectedRow, selectedCol);
     _sudoku.setNumbersInCell(selectedRow, selectedCol, availableNumbers);
     _updateSudokuStacks();
     _updateSudokuView();
+}
+
+void SudokuController::clearNumbersInSelectedCell()
+{
+    auto selectedRow = _sudokuView->selectedRow();
+    auto selectedCol = _sudokuView->selectedCol();
+    _sudoku.clearNumbersInCell(selectedRow, selectedCol);
+    _updateSudokuStacks();
+    _updateSudokuView();
+}
+
+void SudokuController::toggleSelectedCellMark()
+{
+    auto selecetedRow = _sudokuView->selectedRow();
+    auto selecetedCol = _sudokuView->selectedCol();
+    _sudoku.toggleCellMark(selecetedRow, selecetedCol);
+    _updateSudokuStacks();
+    _updateSudokuView();
+}
+
+void SudokuController::highlightSameNumbersOfSelectedCell()
+{
+
 }
 
 void SudokuController::undo()

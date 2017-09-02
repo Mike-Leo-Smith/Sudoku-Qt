@@ -18,6 +18,7 @@ class Sudoku
     {
         Bits bits;
         bool preset;
+        bool marked;
     };
 
 private:
@@ -42,11 +43,13 @@ public:
     bool isSolved() const;
     void print() const;
     bool isImmutable(int row, int col) const;
+    bool isMarked(int row, int col) const;
     int countNumbersInCell(int row, int col) const;
     Numbers getNumbersInCell(int row, int col) const;
     Numbers getAvailableNumbersForCell(int row, int col) const;
     Numbers getConflictiveNumbersInCell(int row, int col) const;
     void reset();
+    bool toggleCellMark(int row, int col);
     bool clearNumbersInCell(int row, int col);
     bool setNumbersInCell(int row, int col, Numbers numbers);
     bool addNumberToCell(int row, int col, int number);

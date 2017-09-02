@@ -45,6 +45,9 @@ public slots:
     void resetCurrentSudoku();
     void toggleNumberInSelectedCell(int number);
     void getHintsForSelectedCell();
+    void clearNumbersInSelectedCell();
+    void toggleSelectedCellMark();
+    void highlightSameNumbersOfSelectedCell();
     void undo();
     void redo();
 

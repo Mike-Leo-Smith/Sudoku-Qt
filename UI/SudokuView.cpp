@@ -40,9 +40,10 @@ void SudokuView::setBackgroundColor(QColor color)
     update();
 }
 
-void SudokuView::clearAllCells()
+void SudokuView::reset()
 {
     _numberCells.clear();
+    _highlightedCells.clear();
     update();
 }
 
@@ -55,6 +56,9 @@ void SudokuView::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
     _drawGrids();
+    _drawHighlightedCells();
+    _highlightSelectedCell();
+    _highlightCurrentCell();
     _drawNumbers();
 }
 
@@ -130,13 +134,7 @@ void SudokuView::_drawNumbersInCell(const NumberCell &numberCell)
 
     QPainter painter(this);
     painter.setRenderHints(QPainter::TextAntialiasing | QPainter::Antialiasing);
-
-    if (_currentRow == numberCell.row && _currentCol == numberCell.col) {
-        painter.setPen(numberCell.color.lighter());
-    } else {
-        painter.setPen(numberCell.color);
-    }
-
+    painter.setPen(numberCell.color);
     painter.translate(_outerGridLineWidth * 0.5 + numberCell.col * _cellLength, _outerGridLineWidth * 0.5 + numberCell.row * _cellLength);
 
     QFont font;
@@ -192,23 +190,18 @@ void SudokuView::_drawGrids()
     for (int y = 0; y <= _boardLength; y += _regionLength) {
         painter.drawLine(0, y, _boardLength, y);
     }
+}
 
-    auto highlightCell = [this, &painter](int row, int col, QColor color) {
-        if (row >= 0 && row < 9 && col >= 0 && col < 9) {
-            painter.save();
-            painter.setPen(Qt::NoPen);
-            painter.setBrush(Qt::darkGray);
-            painter.translate(col * _cellLength + _innerGridLineWidth * 0.5, row * _cellLength + _innerGridLineWidth * 0.5);
-            painter.drawRect(0, 0, _cellLength - _innerGridLineWidth, _cellLength - _innerGridLineWidth);
-            painter.setBrush(color);
-            painter.drawRect(0, 0, _cellLength - _innerGridLineWidth * 2, _cellLength - _innerGridLineWidth * 2);
-            painter.restore();
-        }
-    };
+void SudokuView::_highlightCurrentCell()
+{
+    const auto currentCellColor = QColor(250, 250, 250, 150);
+    _highlightCell({ _currentRow, _currentCol, currentCellColor });
+}
 
-    // Hightlight the cell under the mouse and the selected cell.
-    highlightCell(_currentRow, _currentCol, _backgroundColor.lighter());
-    highlightCell(_selectedRow, _selectedCol, _backgroundColor.darker());
+void SudokuView::_highlightSelectedCell()
+{
+    const auto selectedCellColor = QColor(50, 50, 50, 150);
+    _highlightCell({ _selectedRow, _selectedCol, selectedCellColor });
 }
 
 void SudokuView::_drawNumbers()
@@ -218,6 +211,46 @@ void SudokuView::_drawNumbers()
             _drawNumbersInCell(numberCell);
         }
     }
+}
+
+void SudokuView::_highlightCell(const HighlightedCell &highlightedCell)
+{
+    auto row = highlightedCell.row;
+    auto col = highlightedCell.col;
+    auto color = highlightedCell.color;
+    auto frameLength = _cellLength - _innerGridLineWidth;
+    auto backgroundBrush = QBrush(color);
+    const auto frameColor = QColor(60, 60, 60, 200);
+    auto framePen = QPen(frameColor, _innerGridLineWidth);
+    framePen.setCapStyle(Qt::RoundCap);
+
+    QPainter painter(this);
+    painter.translate(_outerGridLineWidth * 0.5, _outerGridLineWidth * 0.5);
+    painter.translate(col * _cellLength + _innerGridLineWidth * 0.5, row * _cellLength + _innerGridLineWidth * 0.5);
+
+    if (row >= 0 && row < 9 && col >= 0 && col < 9) {
+        painter.save();
+        painter.setBrush(backgroundBrush);
+        painter.setPen(Qt::NoPen);
+        painter.drawRect(0, 0, frameLength, frameLength);
+        painter.setBrush(Qt::NoBrush);
+        painter.setPen(framePen);
+        painter.drawLine(_innerGridLineWidth * 0.5, frameLength, frameLength, frameLength);
+        painter.drawLine(frameLength, _innerGridLineWidth * 0.5, frameLength, frameLength);
+        painter.restore();
+    }
+}
+
+void SudokuView::_drawHighlightedCells()
+{
+    for (const auto &highlightedCell : _highlightedCells) {
+        _highlightCell(highlightedCell);
+    }
+}
+
+void SudokuView::addHighlightedCell(HighlightedCell highlightedCell)
+{
+    _highlightedCells.push_back(highlightedCell);
 }
 
 int SudokuView::selectedRow() const
