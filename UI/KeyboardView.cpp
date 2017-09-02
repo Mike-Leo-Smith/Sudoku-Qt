@@ -44,9 +44,9 @@ KeyboardView::KeyboardView(QWidget *parent) : QWidget(parent)
     registerButton(markButton, static_cast<int>(FunctionalKeyID::mark), functionalKeyLayout);
     connect(markButton, &QPushButton::clicked, this, &KeyboardView::shouldToggleCellMark);
 
-    auto highlightButton = buttonWithText("H");
-    registerButton(highlightButton, static_cast<int>(FunctionalKeyID::highlight), functionalKeyLayout);
-    connect(highlightButton, &QPushButton::clicked, this, &KeyboardView::shouldHighlightSameNumbers);
+    auto hintButton = buttonWithText("H");
+    registerButton(hintButton, static_cast<int>(FunctionalKeyID::hint), functionalKeyLayout);
+    connect(hintButton, &QPushButton::clicked, this, &KeyboardView::shouldGetHintsForCell);
 }
 
 void KeyboardView::setSelectedButtons(QVector<int> selectedKeyIDs)

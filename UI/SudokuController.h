@@ -20,6 +20,8 @@ private:
     int _currentOperationIndex = 0;
     int _currentSudokuIndex = 0;
 
+    bool _gameRunning = false;
+
     Sudoku _sudoku;
     SudokuView *_sudokuView;
 
@@ -47,7 +49,7 @@ public slots:
     void getHintsForSelectedCell();
     void clearNumbersInSelectedCell();
     void toggleSelectedCellMark();
-    void highlightSameNumbersOfSelectedCell();
+    void setGameRunning(bool isRunning);
     void undo();
     void redo();
 
@@ -56,7 +58,6 @@ signals:
 
     void shouldSetMarkedNumbers(QVector<int> numbersInCell);
     void shouldDisableKeyboard(bool);
-    void shouleDisableHints(bool);
     void shouldDisableUndo(bool);
     void shouldDisableRedo(bool);
 };

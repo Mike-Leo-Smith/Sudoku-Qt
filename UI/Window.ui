@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>808</width>
-    <height>524</height>
+    <width>784</width>
+    <height>526</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -30,7 +30,7 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_5">
+  <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <widget class="SudokuView" name="sudokuView">
      <property name="sizePolicy">
@@ -54,192 +54,216 @@
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="StopwatchView" name="stopwatchDisplay">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>70</height>
-        </size>
-       </property>
-       <property name="smallDecimalPoint">
-        <bool>false</bool>
-       </property>
-       <property name="digitCount">
-        <number>8</number>
-       </property>
-       <property name="mode">
-        <enum>QLCDNumber::Dec</enum>
-       </property>
-       <property name="segmentStyle">
-        <enum>QLCDNumber::Filled</enum>
-       </property>
-       <property name="value" stdset="0">
-        <double>0.000000000000000</double>
-       </property>
-       <property name="intValue" stdset="0">
-        <number>0</number>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KeyboardView" name="keyboardView" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>150</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>30</pointsize>
-        </font>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QComboBox" name="difficultyChoices">
-         <item>
-          <property name="text">
-           <string>Starter</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Easy</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Leisure</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Medium</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Hard</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Professional</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Master</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Crazy</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Hell</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Impossible</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="newgameButton">
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
+    <widget class="QWidget" name="controlPanel" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="StopwatchView" name="stopwatchDisplay">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>70</height>
+         </size>
+        </property>
+        <property name="smallDecimalPoint">
+         <bool>false</bool>
+        </property>
+        <property name="digitCount">
+         <number>8</number>
+        </property>
+        <property name="mode">
+         <enum>QLCDNumber::Dec</enum>
+        </property>
+        <property name="segmentStyle">
+         <enum>QLCDNumber::Filled</enum>
+        </property>
+        <property name="value" stdset="0">
+         <double>0.000000000000000</double>
+        </property>
+        <property name="intValue" stdset="0">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KeyboardView" name="keyboardView" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>150</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>30</pointsize>
+         </font>
+        </property>
+        <zorder>groupBox</zorder>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="difficultyChoices">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <item>
          <property name="text">
-          <string>New Game</string>
+          <string>Starter</string>
          </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QPushButton" name="pauseButton">
+        </item>
+        <item>
          <property name="text">
-          <string>Pause</string>
+          <string>Easy</string>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="resetButton">
+        </item>
+        <item>
          <property name="text">
-          <string>Restart</string>
+          <string>Leisure</string>
          </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
-        <widget class="QPushButton" name="undoButton">
+        </item>
+        <item>
          <property name="text">
-          <string>Undo</string>
+          <string>Medium</string>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="redoButton">
+        </item>
+        <item>
          <property name="text">
-          <string>Redo</string>
+          <string>Hard</string>
          </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <item>
-        <widget class="QPushButton" name="solveButton">
-         <property name="autoFillBackground">
-          <bool>false</bool>
-         </property>
+        </item>
+        <item>
          <property name="text">
-          <string>Answer</string>
+          <string>Professional</string>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="hintButton">
+        </item>
+        <item>
          <property name="text">
-          <string>Hints</string>
+          <string>Master</string>
          </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
+        </item>
+        <item>
+         <property name="text">
+          <string>Crazy</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Hell</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Impossible</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="2" column="1">
+         <widget class="QPushButton" name="resetButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Restart</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="undoButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Undo</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QPushButton" name="pauseButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Pause</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QPushButton" name="solveButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Answer</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="redoButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Redo</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QPushButton" name="newgameButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>New Game</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
-  <zorder></zorder>
-  <zorder>sudokuView</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

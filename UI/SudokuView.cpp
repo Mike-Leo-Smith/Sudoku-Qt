@@ -3,6 +3,10 @@
 #include <QMouseEvent>
 #include <QDebug>
 #include <QKeyEvent>
+#include <QImage>
+#include <QLabel>
+#include <QGraphicsEffect>
+#include <QPixmap>
 #include "SudokuView.h"
 
 SudokuView::SudokuView(QWidget *parent) : QOpenGLWidget(parent)
@@ -47,6 +51,11 @@ void SudokuView::reset()
     update();
 }
 
+void SudokuView::setGameRunning(bool isRunning)
+{
+    _gameRunning = isRunning;
+}
+
 void SudokuView::addNumberCell(NumberCell numberCell)
 {
     _numberCells.push_back(numberCell);
@@ -55,11 +64,19 @@ void SudokuView::addNumberCell(NumberCell numberCell)
 void SudokuView::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
+
     _drawGrids();
     _drawHighlightedCells();
     _highlightSelectedCell();
     _highlightCurrentCell();
     _drawNumbers();
+    _useGaussianBlurEffect();
+}
+
+void SudokuView::_useGaussianBlurEffect()
+{
+    //QPainter painter(this);
+    //render(&painter);
 }
 
 void SudokuView::resizeEvent(QResizeEvent *event)
@@ -82,6 +99,10 @@ void SudokuView::resizeEvent(QResizeEvent *event)
 
 void SudokuView::mouseMoveEvent(QMouseEvent *event)
 {
+    if (_gameRunning) {
+        return;
+    }
+
     _currentRow = (event->y() - _outerGridLineWidth * 0.5) / _cellLength;
     _currentCol = (event->x() - _outerGridLineWidth * 0.5) / _cellLength;
     update();
@@ -89,6 +110,10 @@ void SudokuView::mouseMoveEvent(QMouseEvent *event)
 
 void SudokuView::mousePressEvent(QMouseEvent *event)
 {
+    if (!_gameRunning) {
+        return;
+    }
+
     Q_UNUSED(event);
     toggleCurrentCellSelection();
     update();
@@ -96,7 +121,9 @@ void SudokuView::mousePressEvent(QMouseEvent *event)
 
 void SudokuView::keyPressEvent(QKeyEvent *event)
 {
-    qDebug() << "Key pressed!";
+    if (!_gameRunning) {
+        return;
+    }
 
     if (_currentRow < 0 || _currentRow >= 9 || _currentCol < 0 || _currentCol >= 9) {
         _currentRow = 0;
@@ -133,7 +160,8 @@ void SudokuView::_drawNumbersInCell(const NumberCell &numberCell)
     }
 
     QPainter painter(this);
-    painter.setRenderHints(QPainter::TextAntialiasing | QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::TextAntialiasing, true);
+    painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setPen(numberCell.color);
     painter.translate(_outerGridLineWidth * 0.5 + numberCell.col * _cellLength, _outerGridLineWidth * 0.5 + numberCell.row * _cellLength);
 
@@ -273,7 +301,6 @@ void SudokuView::selectCurrentCell()
 {
     _selectedRow = _currentRow;
     _selectedCol = _currentCol;
-    emit cellSelected(_currentRow, _currentCol);
 }
 
 void SudokuView::toggleCurrentCellSelection()
@@ -283,4 +310,5 @@ void SudokuView::toggleCurrentCellSelection()
     } else {
         selectCurrentCell();
     }
+    emit cellSelectionToggled(_currentRow, _currentCol);
 }

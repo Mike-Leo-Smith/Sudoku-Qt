@@ -9,11 +9,7 @@
 
 bool SudokuSolver::solve(Sudoku &sudoku)
 {
-    for (int row = 0; row < 9; row++) {
-        for (int col = 0; col < 9; col++) {
-            sudoku.clearNumbersInCell(row, col);
-        }
-    }
+    sudoku.reset();
     return _backtrackingEngine(sudoku);
 }
 

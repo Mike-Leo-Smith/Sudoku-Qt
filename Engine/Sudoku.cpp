@@ -290,3 +290,12 @@ void Sudoku::print() const
     }
     std::cout << std::endl;
 }
+
+void Sudoku::forEachCell(Sudoku::CellOperationFunction operation)
+{
+    for (int row = 0; row < 9; row++) {
+        for (int col = 0; col < 9; col++) {
+            operation(*this, row, col);
+        }
+    }
+}

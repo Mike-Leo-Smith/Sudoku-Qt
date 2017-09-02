@@ -17,7 +17,7 @@ public:
     enum class FunctionalKeyID {
         clear = 0,
         mark = 10,
-        highlight = 11
+        hint = 11
     };
 
     explicit KeyboardView(QWidget *parent = nullptr);
@@ -27,7 +27,7 @@ signals:
     void shouldToggleNumberInCell(int val);
     void shouldClearNumbersInCell();
     void shouldToggleCellMark();
-    void shouldHighlightSameNumbers();
+    void shouldGetHintsForCell();
 
 public slots:
     void setSelectedButtons(QVector<int> selectedKeyIDs);

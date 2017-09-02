@@ -12,18 +12,16 @@ Sudoku SudokuCreator::load(int numbers[9][9])
 {
     Sudoku sudoku;
 
-    for (int row = 0; row < 9; row++) {
-        for (int col = 0; col < 9; col++) {
-            auto number = numbers[row][col];
-            if (sudoku._isNumberValid(number)) {
-                sudoku._board[row][col].bits = sudoku._convertNumberToBit(number);
-                sudoku._board[row][col].preset = true;
-            } else {
-                sudoku._board[row][col].bits = 0;
-                sudoku._board[row][col].preset = false;
-            }
+    sudoku.forEachCell([&numbers](Sudoku &s, int row, int col) {
+        auto number = numbers[row][col];
+        if (s._isNumberValid(number)) {
+            s._board[row][col].bits = s._convertNumberToBit(number);
+            s._board[row][col].preset = true;
+        } else {
+            s._board[row][col].bits = 0;
+            s._board[row][col].preset = false;
         }
-    }
+    });
     return sudoku;
 }
 
@@ -45,7 +43,7 @@ Sudoku SudokuCreator::random(int preferredClueCount)
     auto attempt = [&randomIndex](Sudoku &sudoku) -> bool {
         Sudoku newSudoku;
         for (int row = 0; row < 9; row++) {
-            for (int col = 0; col < 9; col++) {
+            for (int col =0 ;col < 9; col++) {
                 auto availableNumbers = newSudoku.getAvailableNumbersForCell(row, col);
                 if (availableNumbers.empty()) {
                     return false;

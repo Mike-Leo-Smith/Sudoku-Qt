@@ -40,8 +40,10 @@ void StopwatchView::start()
 void StopwatchView::stop()
 {
     _refreshTimer->stop();
-    _isStopped = true;
-    _accumulatedMilliseconds += _elapsedTimeCounter.elapsed();
+    if (!_isStopped) {
+        _isStopped = true;
+        _accumulatedMilliseconds += _elapsedTimeCounter.elapsed();
+    }
     _refreshDisplay();
 }
 

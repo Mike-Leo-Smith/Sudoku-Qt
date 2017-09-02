@@ -6,6 +6,7 @@
 #define SUDOKU_SUDOKU_H
 
 #include <vector>
+#include <functional>
 
 class Sudoku
 {
@@ -13,6 +14,7 @@ class Sudoku
 
     using Bits = unsigned short;
     using Numbers = std::vector<int>;
+    using CellOperationFunction = std::function<void(Sudoku &, int, int)>;
 
     struct Cell
     {
@@ -56,6 +58,7 @@ public:
     bool removeNumberFromCell(int row, int col, int number);
     bool isNumberInCell(int row, int col, int number);
     bool toggleNumberInCell(int row, int col, int number);
+    void forEachCell(CellOperationFunction operation);
 };
 
 #endif  // SUDOKU_SUDOKU_H

@@ -51,6 +51,7 @@ public:
     void toggleCurrentCellSelection();
 
     void reset();
+    void setGameRunning(bool);
     void addNumberCell(NumberCell numberCell);
     void addHighlightedCell(HighlightedCell highlightedCell);
 
@@ -62,13 +63,14 @@ private:
     int _innerGridLineWidth = 3;
     QColor _innerGridColor = QColor(147, 112, 219);
     QColor _outerGridColor = QColor(123, 104, 238);
-    QColor _backgroundColor = QColor(216, 236, 222);
+    QColor _backgroundColor = QColor(230, 230, 255);
     NumberCellList _numberCells;
     HighlightedCellList _highlightedCells;
     int _currentRow = -1;
     int _currentCol = -1;
     int _selectedRow = -1;
     int _selectedCol = -1;
+    bool _gameRunning = false;
 
     void _drawGrids();
     void _highlightCell(const HighlightedCell &highlightedCell);
@@ -77,10 +79,10 @@ private:
     void _highlightCurrentCell();
     void _drawNumbers();
     void _drawNumbersInCell(const NumberCell &numberCell);
+    void _useGaussianBlurEffect();
 
 signals:
-    void cellSelected(int row, int col);
-    //void cellDeselected(int row, int col);
+    void cellSelectionToggled(int row, int col);
 };
 
 #endif // SUDOKUVIEW_H

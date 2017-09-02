@@ -18,6 +18,7 @@ public:
     ~Window() override;
 
     void keyPressEvent(QKeyEvent *event) override;
+    void closeEvent(QCloseEvent *event) override;
 
 private:
     Ui::Widget *ui;
@@ -32,7 +33,11 @@ private slots:
     void _pauseGame();
     void _restartGame();
     void _resumeGame();
+    void _solveGame();
     void _changeDifficulty(int newDifficulty);
+
+signals:
+    void shouldGameRun(bool);
 };
 
 #endif // WIDGET_H
