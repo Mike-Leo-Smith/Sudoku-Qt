@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QSizePolicy>
+#include <QMediaPlayer>
 #include "Window.h"
 #include "ui_Window.h"
 #include "SudokuController.h"
