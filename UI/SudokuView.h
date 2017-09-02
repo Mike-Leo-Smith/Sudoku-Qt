@@ -1,12 +1,13 @@
 #ifndef SUDOKUVIEW_H
 #define SUDOKUVIEW_H
 
-#include <QOpenGLWidget>
+#include <QWidget>
 #include <QMap>
 #include <QPoint>
 #include <QSet>
+#include <QGraphicsBlurEffect>
 
-class SudokuView : public QOpenGLWidget
+class SudokuView : public QWidget
 {
     Q_OBJECT
 

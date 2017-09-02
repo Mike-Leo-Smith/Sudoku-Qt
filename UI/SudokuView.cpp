@@ -6,11 +6,15 @@
 #include <QImage>
 #include <QLabel>
 #include <QGraphicsEffect>
+#include <QPropertyAnimation>
 #include <QPixmap>
 #include "SudokuView.h"
 
-SudokuView::SudokuView(QWidget *parent) : QOpenGLWidget(parent)
+SudokuView::SudokuView(QWidget *parent) : QWidget(parent)
 {
+    auto blurEffect = new QGraphicsBlurEffect(this);
+    blurEffect->setBlurRadius(50);
+    setGraphicsEffect(blurEffect);
     setMouseTracking(true);
 }
 
@@ -54,6 +58,15 @@ void SudokuView::reset()
 void SudokuView::setGameRunning(bool isRunning)
 {
     _gameRunning = isRunning;
+    if (auto blurEffect = dynamic_cast<QGraphicsBlurEffect *>(graphicsEffect())) {
+        blurEffect->setEnabled(!_gameRunning);
+        blurEffect->setBlurRadius(_cellLength);
+//        QPropertyAnimation animation(blurEffect, "blurRadius", this);
+//        animation.setDuration(1000);
+//        animation.setStartValue(1);
+//        animation.setEndValue(50);
+//        animation.start();
+    }
 }
 
 void SudokuView::addNumberCell(NumberCell numberCell)
@@ -99,7 +112,7 @@ void SudokuView::resizeEvent(QResizeEvent *event)
 
 void SudokuView::mouseMoveEvent(QMouseEvent *event)
 {
-    if (_gameRunning) {
+    if (!_gameRunning) {
         return;
     }
 

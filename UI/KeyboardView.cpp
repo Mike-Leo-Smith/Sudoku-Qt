@@ -2,12 +2,13 @@
 #include <QString>
 #include <QLayout>
 #include <QDebug>
+#include <QPixmap>
 #include <QKeyEvent>
 #include "KeyboardView.h"
 
 KeyboardView::KeyboardView(QWidget *parent) : QWidget(parent)
 {
-    auto buttonWithText = [this](QString text) {
+    auto buttonWithText = [this](QString text = "") {
         auto button = new QPushButton(text, this);
         button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         button->setCheckable(true);
@@ -36,15 +37,21 @@ KeyboardView::KeyboardView(QWidget *parent) : QWidget(parent)
     auto functionalKeyLayout = new QHBoxLayout;
     outerLayout->addLayout(functionalKeyLayout);
 
-    auto clearButton = buttonWithText(QString("C"));
+    auto clearButton = buttonWithText();
+    clearButton->setIcon(QIcon(":/Images/Clear.jpg"));
+    clearButton->setIconSize(clearButton->size());
     registerButton(clearButton, static_cast<int>(FunctionalKeyID::clear), functionalKeyLayout);
     connect(clearButton, &QPushButton::clicked, this, &KeyboardView::shouldClearNumbersInCell);
 
-    auto markButton = buttonWithText(QString("M"));
+    auto markButton = buttonWithText();
+    markButton->setIcon(QIcon(":/Images/Flag.jpg"));
+    markButton->setIconSize(markButton->size());
     registerButton(markButton, static_cast<int>(FunctionalKeyID::mark), functionalKeyLayout);
     connect(markButton, &QPushButton::clicked, this, &KeyboardView::shouldToggleCellMark);
 
-    auto hintButton = buttonWithText("H");
+    auto hintButton = buttonWithText();
+    hintButton->setIcon(QIcon(":/Images/Hint.jpg"));
+    hintButton->setIconSize(hintButton->size());
     registerButton(hintButton, static_cast<int>(FunctionalKeyID::hint), functionalKeyLayout);
     connect(hintButton, &QPushButton::clicked, this, &KeyboardView::shouldGetHintsForCell);
 }

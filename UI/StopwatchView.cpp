@@ -3,7 +3,7 @@
 StopwatchView::StopwatchView(QWidget *parent)
     : QLCDNumber(parent), _refreshTimer(new QTimer(this)), _accumulatedMilliseconds(0), _isStopped(0)
 {
-    _refreshTimer->setInterval(100);
+    _refreshTimer->setInterval(200);
     connect(_refreshTimer, &QTimer::timeout, this, &StopwatchView::_refreshDisplay);
 }
 
@@ -50,6 +50,5 @@ void StopwatchView::stop()
 void StopwatchView::_refreshDisplay()
 {
     auto elapsedTime = _isStopped ? _accumulatedMilliseconds : _accumulatedMilliseconds + _elapsedTimeCounter.elapsed();
-    auto roundedTime = int(elapsedTime / 100) * 0.1;
-    display(roundedTime);
+    display(elapsedTime / 1000);
 }

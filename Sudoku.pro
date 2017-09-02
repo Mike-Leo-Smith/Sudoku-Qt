@@ -46,5 +46,6 @@ HEADERS += \
 FORMS += \
     UI/Window.ui
 
-DISTFILES +=
+RESOURCES += \
+    Assets/assets.qrc
 
