@@ -2,6 +2,7 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QMediaPlayer>
 #include "GameState.h"
 #include "BannerView.h"
 
@@ -24,11 +25,12 @@ public:
 
 private:
     Ui::Widget *ui;
-    SudokuController *_sudokuController;
-    BannerView *_bannerView;
+    SudokuController *_sudokuController = nullptr;
+    BannerView *_bannerView = nullptr;
     int _currentDifficulty;
     int _clueCountForSelectedDifficulty() const;
     GameState _gameState = GameState::initial;
+    QMediaPlayer *_soundEffect = nullptr;
 
 private slots:
     void _initializeGame();

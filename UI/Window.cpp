@@ -16,6 +16,8 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Widget)
 
     _sudokuController = new SudokuController(ui->sudokuView, this);
     _bannerView = new BannerView(this);
+    _soundEffect = new QMediaPlayer(this);
+    _soundEffect->setMedia(QUrl("qrc:/Sounds/Winning.mp3"));
 
     _initializeGame();
 
@@ -90,6 +92,7 @@ void Window::_finishGame()
     _pauseGame();
     _setGameState(GameState::ended);
     _bannerView->display("Solved!", QColor(250, 70, 70), ui->sudokuView->size());
+    _soundEffect->play();
 }
 
 void Window::_initializeGame()

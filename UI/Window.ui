@@ -116,23 +116,6 @@
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QLabel" name="label">
-          <property name="font">
-           <font>
-            <family>Geeza Pro</family>
-            <pointsize>44</pointsize>
-            <kerning>true</kerning>
-           </font>
-          </property>
-          <property name="text">
-           <string>s</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-          </property>
-         </widget>
-        </item>
        </layout>
       </item>
       <item>
