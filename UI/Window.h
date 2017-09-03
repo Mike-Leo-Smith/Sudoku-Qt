@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QMediaPlayer>
+#include <QString>
+#include <QMap>
 #include "GameState.h"
 #include "BannerView.h"
 
@@ -15,6 +17,8 @@ class SudokuController;
 class Window : public QWidget
 {
     Q_OBJECT
+
+    using SoundEffectTable = QMap<QString, QMediaPlayer *>;
 
 public:
     explicit Window(QWidget *parent = 0);
@@ -30,7 +34,7 @@ private:
     int _currentDifficulty;
     int _clueCountForSelectedDifficulty() const;
     GameState _gameState = GameState::initial;
-    QMediaPlayer *_soundEffect = nullptr;
+    SoundEffectTable _soundEffects;
 
 private slots:
     void _initializeGame();

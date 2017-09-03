@@ -4,6 +4,8 @@
         <file>Images/Flag.png</file>
         <file>Images/Hint.png</file>
         <file>Images/Icon.png</file>
-        <file>Sounds/Winning.mp3</file>
+        <file>Sounds/Failing.wav</file>
+        <file>Sounds/Starting.wav</file>
+        <file>Sounds/Winning.wav</file>
     </qresource>
 </RCC>

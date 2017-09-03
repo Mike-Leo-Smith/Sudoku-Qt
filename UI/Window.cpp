@@ -16,8 +16,22 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Widget)
 
     _sudokuController = new SudokuController(ui->sudokuView, this);
     _bannerView = new BannerView(this);
-    _soundEffect = new QMediaPlayer(this);
-    _soundEffect->setMedia(QUrl("qrc:/Sounds/Winning.mp3"));
+
+    auto winningSoundEffect = new QMediaPlayer(this);
+    winningSoundEffect->setMedia(QUrl("qrc:/Sounds/Winning.wav"));
+    _soundEffects.insert("Winning", winningSoundEffect);
+
+    auto failingSoundEffect = new QMediaPlayer(this);
+    failingSoundEffect->setMedia(QUrl("qrc:/Sounds/Failing.wav"));
+    _soundEffects.insert("Failing", failingSoundEffect);
+
+    auto startingSoundEffect = new QMediaPlayer(this);
+    startingSoundEffect->setMedia(QUrl("qrc:/Sounds/Starting.wav"));
+    _soundEffects.insert("Starting", startingSoundEffect);
+
+    auto initializingSoundEffect = new QMediaPlayer(this);
+    initializingSoundEffect->setMedia(QUrl("qrc:/Sounds/Initializing.wav"));
+    _soundEffects.insert("Initializing", initializingSoundEffect);
 
     _initializeGame();
 
@@ -92,7 +106,7 @@ void Window::_finishGame()
     _pauseGame();
     _setGameState(GameState::ended);
     _bannerView->display("Solved!", QColor(250, 70, 70), ui->sudokuView->size());
-    _soundEffect->play();
+    _soundEffects["Winning"]->play();
 }
 
 void Window::_initializeGame()
@@ -105,6 +119,7 @@ void Window::_initializeGame()
     ui->stopwatchDisplay->reset();
     _setGameState(GameState::initial);
     _bannerView->display("Sudoku", QColor(60, 133, 250), ui->sudokuView->size());
+    _soundEffects["Initializing"]->play();
 }
 
 void Window::_restartGame()
@@ -132,6 +147,7 @@ void Window::_startGame()
         ui->stopwatchDisplay->restart();
         _setGameState(GameState::inGame);
         _bannerView->hide();
+        _soundEffects["Starting"]->play();
     }
 }
 
@@ -162,6 +178,7 @@ void Window::_solveGame()
         ui->stopwatchDisplay->stop();
         _setGameState(GameState::ended);
         _bannerView->hide();
+        _soundEffects["Failing"]->play();
     }
 }
 
