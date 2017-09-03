@@ -5,7 +5,7 @@
 #include <QTimer>
 #include <QTime>
 
-class StopwatchView : public QLCDNumber
+class StopwatchController : public QLCDNumber
 {
     Q_OBJECT
 
@@ -16,8 +16,8 @@ private:
     bool _isStopped;
 
 public:
-    explicit StopwatchView(QWidget *parent = nullptr);
-    ~StopwatchView() override;
+    explicit StopwatchController(QWidget *parent = nullptr);
+    ~StopwatchController() override;
 
 signals:
 

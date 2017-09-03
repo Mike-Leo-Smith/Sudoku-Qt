@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>759</width>
+    <width>764</width>
     <height>528</height>
    </rect>
   </property>
@@ -39,7 +39,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="SudokuView" name="sudokuView">
+    <widget class="SudokuView" name="sudokuView" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -51,17 +51,6 @@
        <width>500</width>
        <height>500</height>
       </size>
-     </property>
-     <property name="baseSize">
-      <size>
-       <width>500</width>
-       <height>500</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <stylestrategy>PreferAntialias</stylestrategy>
-      </font>
      </property>
     </widget>
    </item>
@@ -77,7 +66,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="StopwatchView" name="stopwatchDisplay">
+         <widget class="StopwatchController" name="stopwatchDisplay">
           <property name="sizePolicy">
            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
             <horstretch>0</horstretch>
@@ -119,7 +108,7 @@
        </layout>
       </item>
       <item>
-       <widget class="KeyboardView" name="keyboardView" native="true">
+       <widget class="KeyboardController" name="keyboard" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -296,20 +285,21 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>SudokuView</class>
-   <extends>QOpenGLWidget</extends>
-   <header>UI/SudokuView.h</header>
+   <class>StopwatchController</class>
+   <extends>QLCDNumber</extends>
+   <header>UI/StopwatchController.h</header>
   </customwidget>
   <customwidget>
-   <class>KeyboardView</class>
+   <class>KeyboardController</class>
    <extends>QWidget</extends>
-   <header>UI/KeyboardView.h</header>
+   <header>UI/KeyboardController.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>StopwatchView</class>
-   <extends>QLCDNumber</extends>
-   <header>UI/StopwatchView.h</header>
+   <class>SudokuView</class>
+   <extends>QWidget</extends>
+   <header>UI/SudokuView.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

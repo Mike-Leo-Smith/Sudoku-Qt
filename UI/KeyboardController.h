@@ -6,7 +6,7 @@
 #include <QPushButton>
 #include <QHash>
 
-class KeyboardView : public QWidget
+class KeyboardController : public QWidget
 {
     Q_OBJECT
 
@@ -20,7 +20,7 @@ public:
         hint = 11
     };
 
-    explicit KeyboardView(QWidget *parent = nullptr);
+    explicit KeyboardController(QWidget *parent = nullptr);
     void keyPressEvent(QKeyEvent *event) override;
 
 signals:

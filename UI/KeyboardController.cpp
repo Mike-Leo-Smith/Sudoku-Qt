@@ -3,9 +3,9 @@
 #include <QLayout>
 #include <QPixmap>
 #include <QKeyEvent>
-#include "KeyboardView.h"
+#include "KeyboardController.h"
 
-KeyboardView::KeyboardView(QWidget *parent) : QWidget(parent)
+KeyboardController::KeyboardController(QWidget *parent) : QWidget(parent)
 {
     auto buttonWithText = [this](QString text = "") {
         auto button = new QPushButton(text, this);
@@ -40,22 +40,22 @@ KeyboardView::KeyboardView(QWidget *parent) : QWidget(parent)
     clearButton->setIcon(QIcon(":/Images/Clear.png"));
     clearButton->setIconSize(clearButton->size());
     registerButton(clearButton, static_cast<int>(FunctionalKeyID::clear), functionalKeyLayout);
-    connect(clearButton, &QPushButton::clicked, this, &KeyboardView::shouldClearNumbersInCell);
+    connect(clearButton, &QPushButton::clicked, this, &KeyboardController::shouldClearNumbersInCell);
 
     auto markButton = buttonWithText();
     markButton->setIcon(QIcon(":/Images/Flag.png"));
     markButton->setIconSize(markButton->size());
     registerButton(markButton, static_cast<int>(FunctionalKeyID::mark), functionalKeyLayout);
-    connect(markButton, &QPushButton::clicked, this, &KeyboardView::shouldToggleCellMark);
+    connect(markButton, &QPushButton::clicked, this, &KeyboardController::shouldToggleCellMark);
 
     auto hintButton = buttonWithText();
     hintButton->setIcon(QIcon(":/Images/Hint.png"));
     hintButton->setIconSize(hintButton->size());
     registerButton(hintButton, static_cast<int>(FunctionalKeyID::hint), functionalKeyLayout);
-    connect(hintButton, &QPushButton::clicked, this, &KeyboardView::shouldGetHintsForCell);
+    connect(hintButton, &QPushButton::clicked, this, &KeyboardController::shouldGetHintsForCell);
 }
 
-void KeyboardView::setSelectedButtons(QVector<int> selectedKeyIDs)
+void KeyboardController::setSelectedButtons(QVector<int> selectedKeyIDs)
 {
     for (auto button : _buttons) {
         button->setChecked(false);
@@ -67,7 +67,7 @@ void KeyboardView::setSelectedButtons(QVector<int> selectedKeyIDs)
     }
 }
 
-void KeyboardView::setDisabled(bool isDisabled)
+void KeyboardController::setDisabled(bool isDisabled)
 {
     if (isDisabled) {
         for (auto button : _buttons) {
@@ -77,7 +77,7 @@ void KeyboardView::setDisabled(bool isDisabled)
     QWidget::setDisabled(isDisabled);
 }
 
-void KeyboardView::keyPressEvent(QKeyEvent *event)
+void KeyboardController::keyPressEvent(QKeyEvent *event)
 {
     if (isEnabled()) {
         auto key = event->key();

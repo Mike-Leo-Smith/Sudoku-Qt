@@ -1,7 +1,7 @@
 #include <QtConcurrent/QtConcurrent>
 #include <QFuture>
 #include <QTimer>
-#include "KeyboardView.h"
+#include "KeyboardController.h"
 #include "SudokuController.h"
 #include "SudokuView.h"
 #include "../Engine/Sudoku.h"
@@ -131,7 +131,7 @@ void SudokuController::_updateSudokuView()
         } else {
             auto checkedKeyIDs = std::move(addedNumbers);
             if (_sudoku.isMarked(selectedRow, selectedCol)) {
-                checkedKeyIDs.push_back(static_cast<int>(KeyboardView::FunctionalKeyID::mark));
+                checkedKeyIDs.push_back(static_cast<int>(KeyboardController::FunctionalKeyID::mark));
             }
             emit shouldDisableKeyboard(false);
             emit shouldSetMarkedNumbers(QVector<int>::fromStdVector(checkedKeyIDs));

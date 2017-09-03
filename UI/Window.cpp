@@ -29,10 +29,6 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Widget)
     startingSoundEffect->setMedia(QUrl("qrc:/Sounds/Starting.wav"));
     _soundEffects.insert("Starting", startingSoundEffect);
 
-    auto initializingSoundEffect = new QMediaPlayer(this);
-    initializingSoundEffect->setMedia(QUrl("qrc:/Sounds/Initializing.wav"));
-    _soundEffects.insert("Initializing", initializingSoundEffect);
-
     _initializeGame();
 
     connect(ui->newgameButton, &QPushButton::clicked, this, &Window::_startGame);
@@ -44,15 +40,15 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Widget)
     connect(ui->pauseButton, &QPushButton::clicked, this, [this] {
         ui->pauseButton->text() == "Pause" ? _pauseGame() : _resumeGame();
     });
-    connect(_sudokuController, &SudokuController::shouldSetMarkedNumbers, ui->keyboardView, &KeyboardView::setSelectedButtons);
-    connect(_sudokuController, &SudokuController::shouldDisableKeyboard, ui->keyboardView, &KeyboardView::setDisabled);
+    connect(_sudokuController, &SudokuController::shouldSetMarkedNumbers, ui->keyboard, &KeyboardController::setSelectedButtons);
+    connect(_sudokuController, &SudokuController::shouldDisableKeyboard, ui->keyboard, &KeyboardController::setDisabled);
     connect(_sudokuController, &SudokuController::shouldDisableRedo, ui->redoButton, &QPushButton::setDisabled);
     connect(_sudokuController, &SudokuController::shouldDisableUndo, ui->undoButton, &QPushButton::setDisabled);
 
-    connect(ui->keyboardView, &KeyboardView::shouldToggleCellMark, _sudokuController, &SudokuController::toggleSelectedCellMark);
-    connect(ui->keyboardView, &KeyboardView::shouldToggleNumberInCell, _sudokuController, &SudokuController::toggleNumberInSelectedCell);
-    connect(ui->keyboardView, &KeyboardView::shouldClearNumbersInCell, _sudokuController, &SudokuController::clearNumbersInSelectedCell);
-    connect(ui->keyboardView, &KeyboardView::shouldGetHintsForCell, _sudokuController, &SudokuController::getHintsForSelectedCell);
+    connect(ui->keyboard, &KeyboardController::shouldToggleCellMark, _sudokuController, &SudokuController::toggleSelectedCellMark);
+    connect(ui->keyboard, &KeyboardController::shouldToggleNumberInCell, _sudokuController, &SudokuController::toggleNumberInSelectedCell);
+    connect(ui->keyboard, &KeyboardController::shouldClearNumbersInCell, _sudokuController, &SudokuController::clearNumbersInSelectedCell);
+    connect(ui->keyboard, &KeyboardController::shouldGetHintsForCell, _sudokuController, &SudokuController::getHintsForSelectedCell);
     connect(this, &Window::gameStateChanged, _sudokuController, &SudokuController::setGameState);
     connect(_sudokuController, &SudokuController::sudokuSolved, this, &Window::_finishGame);
 }
@@ -65,7 +61,7 @@ Window::~Window()
 void Window::keyPressEvent(QKeyEvent *event)
 {
     ui->sudokuView->keyPressEvent(event);
-    ui->keyboardView->keyPressEvent(event);
+    ui->keyboard->keyPressEvent(event);
     QWidget::keyPressEvent(event);
 }
 
@@ -119,7 +115,6 @@ void Window::_initializeGame()
     ui->stopwatchDisplay->reset();
     _setGameState(GameState::initial);
     _bannerView->display("Sudoku", QColor(60, 133, 250), ui->sudokuView->size());
-    _soundEffects["Initializing"]->play();
 }
 
 void Window::_restartGame()

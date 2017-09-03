@@ -1,18 +1,18 @@
-#include "StopwatchView.h"
+#include "StopwatchController.h"
 
-StopwatchView::StopwatchView(QWidget *parent)
+StopwatchController::StopwatchController(QWidget *parent)
     : QLCDNumber(parent), _refreshTimer(new QTimer(this)), _accumulatedMilliseconds(0), _isStopped(0)
 {
     _refreshTimer->setInterval(20);
-    connect(_refreshTimer, &QTimer::timeout, this, &StopwatchView::_refreshDisplay);
+    connect(_refreshTimer, &QTimer::timeout, this, &StopwatchController::_refreshDisplay);
 }
 
-StopwatchView::~StopwatchView()
+StopwatchController::~StopwatchController()
 {
     delete _refreshTimer;
 }
 
-void StopwatchView::reset()
+void StopwatchController::reset()
 {
     _refreshTimer->stop();
     _isStopped = true;
@@ -20,7 +20,7 @@ void StopwatchView::reset()
     _refreshDisplay();
 }
 
-void StopwatchView::restart()
+void StopwatchController::restart()
 {
     _isStopped = 0;
     _accumulatedMilliseconds = 0;
@@ -29,7 +29,7 @@ void StopwatchView::restart()
     _refreshDisplay();
 }
 
-void StopwatchView::start()
+void StopwatchController::start()
 {
     _refreshTimer->start();
     _isStopped = false;
@@ -37,7 +37,7 @@ void StopwatchView::start()
     _refreshDisplay();
 }
 
-void StopwatchView::stop()
+void StopwatchController::stop()
 {
     _refreshTimer->stop();
     if (!_isStopped) {
@@ -47,7 +47,7 @@ void StopwatchView::stop()
     _refreshDisplay();
 }
 
-void StopwatchView::_refreshDisplay()
+void StopwatchController::_refreshDisplay()
 {
     auto elapsedTime = _isStopped ? _accumulatedMilliseconds : _accumulatedMilliseconds + _elapsedTimeCounter.elapsed();
     int milliseconds = elapsedTime % 1000;
